@@ -1,0 +1,106 @@
+<header class="bg-white shadow-sm">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <div class="flex items-center">
+      <a routerLink="/" class="flex items-center">
+        <img src="assets/image.png" alt="Word of Mouth Logo" class="h-12 w-auto mr-2" />
+      </a>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex space-x-8 items-center">
+      <a routerLink="/" class="text-gray-700 hover:text-[#0993B2] font-medium">Home</a>
+
+      <!-- Solutions Dropdown -->
+      <!-- #solutionsDropdown is a template reference variable -->
+      <div class="relative" #solutionsDropdown>
+        <button (click)="toggleSolutionsDropdown($event)" class="flex items-center text-gray-700 hover:text-[#0993B2] font-medium">
+          Solutions
+          <i-feather name="chevron-down" class="ml-1 h-4 w-4 transition-transform" [ngClass]="{'rotate-180': solutionsDropdownOpen}"></i-feather>
+        </button>
+
+        <div *ngIf="solutionsDropdownOpen" class="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+          <div class="py-1" role="menu" aria-orientation="vertical">
+            <a routerLink="/student" (click)="closeAllMenus()" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
+              <i-feather name="book" class="h-5 w-5 mr-3 text-[#0993B2]"></i-feather>
+              <span>Expat Students</span>
+            </a>
+            <a routerLink="/solutions" (click)="closeAllMenus()" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
+              <i-feather name="briefcase" class="h-5 w-5 mr-3 text-[#0993B2]"></i-feather>
+              <span>Expat Professionals</span>
+            </a>
+            <a routerLink="/collaboration" (click)="closeAllMenus()" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
+              <i-feather name="users" class="h-5 w-5 mr-3 text-[#0993B2]"></i-feather>
+              <span>Collaboration</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a routerLink="/about" class="text-gray-700 hover:text-[#0993B2] font-medium">About Us</a>
+      <a routerLink="/pricing" class="text-gray-700 hover:text-[#0993B2] font-medium">Pricing</a>
+      <a routerLink="/onboarding" class="text-gray-700 hover:text-[#0993B2] font-medium flex items-center">
+        Account Setup
+      </a>
+    </nav>
+
+    <!-- Desktop Auth Buttons -->
+    <div class="hidden md:flex items-center space-x-4">
+      <a routerLink="/login" class="text-gray-700 hover:text-[#0993B2] font-medium">Sign In</a>
+      <a routerLink="/signup">
+        <!-- Assuming you have an <app-button> component -->
+        <button class="bg-[#0993B2] text-white px-4 py-2 rounded-md text-sm font-medium">Get Started</button>
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <div class="md:hidden">
+      <button (click)="toggleMenu()" class="text-gray-700 hover:text-[#0993B2] focus:outline-none">
+        <i-feather *ngIf="!isMenuOpen" name="menu" class="h-6 w-6"></i-feather>
+        <i-feather *ngIf="isMenuOpen" name="x" class="h-6 w-6"></i-feather>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="isMenuOpen" class="md:hidden bg-white border-t border-gray-100 py-4">
+    <div class="container mx-auto px-4 space-y-4">
+      <a routerLink="/" (click)="closeAllMenus()" class="block text-gray-700 hover:text-[#0993B2] font-medium">Home</a>
+
+      <!-- Mobile Solutions Dropdown -->
+      <div class="space-y-2">
+        <button (click)="toggleSolutionsDropdown($event)" class="flex items-center text-gray-700 hover:text-[#0993B2] font-medium">
+          Solutions
+          <i-feather name="chevron-down" class="ml-0.5 h-1 w-1 transition-transform" [ngClass]="{'rotate-180': solutionsDropdownOpen}"></i-feather>
+        </button>
+
+        <!-- <div *ngIf="solutionsDropdownOpen" class="pl-4 space-y-3 border-l-2 border-gray-100 py-2">
+          <a routerLink="/student" (click)="closeAllMenus()" class="flex items-center text-gray-700 hover:text-[#0993B2]">
+            <i-feather name="book" class="h-5 w-5 mr-3 text-[#0993B2]"></i-feather>
+            <span>Expat Students</span>
+          </a> -->
+           <a routerLink="/solutions" (click)="closeAllMenus()" class="flex items-center text-gray-700 hover:text-[#0993B2]">
+            <i-feather name="briefcase" class="h-5 w-5 mr-3 text-[#0993B2]"></i-feather>
+            <span>Expat Professionals</span>
+          </a>
+          <a routerLink="/collaoration" (click)="closeAllMenus()" class="flex items-center text-gray-700 hover:text-[#0993B2]">
+            <i-feather name="users" class="h-5 w-5 mr-3 text-[#0993B2]"></i-feather>
+            <span>Collaboration</span>
+          </a>
+        </div>
+      </div>
+
+      <a routerLink="/about" (click)="closeAllMenus()" class="block text-gray-700 hover:text-[#0993B2] font-medium">About Us</a>
+      <a routerLink="/pricing" (click)="closeAllMenus()" class="block text-gray-700 hover:text-[#0993B2] font-medium">Pricing</a>
+      <a routerLink="/onboarding" class="text-gray-700 hover:text-[#0993B2] font-medium flex items-center">
+        <i-feather name="user" class="h-0.1 w-1 mr-1"></i-feather>
+        Account Setup
+      </a>
+      <div class="pt-4 border-t border-gray-100 flex flex-col space-y-3">
+        <a routerLink="/login" (click)="closeAllMenus()" class="text-gray-700 hover:text-[#0993B2] font-medium">Sign In</a>
+        <a routerLink="/signup" (click)="closeAllMenus()">
+          <button class="bg-[#0993B2] text-white px-4 py-2 rounded-md text-sm font-medium w-full">Get Started</button>
+        </a>
+      </div>
+    </div>
+  <!-- </div> -->
+</header>

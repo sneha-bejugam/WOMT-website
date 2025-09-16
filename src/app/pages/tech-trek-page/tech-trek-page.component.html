@@ -1,0 +1,176 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Fluent Frontier</h1>
+    <p class="text-gray-500 mt-1">
+      Navigate through virtual business environments and complete language challenges
+    </p>
+  </div>
+
+  <!-- SELECTION STATE -->
+  <div *ngIf="gameState === 'selection'" class="relative">
+    <div class="bg-blue-50 rounded-xl p-6 relative overflow-hidden">
+      <!-- Background Grid Pattern -->
+      <div class="absolute inset-0 opacity-10">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#1E40AF" strokeWidth="1"/>
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+
+      <div class="relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <app-card
+            *ngFor="let location of locations"
+            (click)="selectedLocationId = location.id"
+            class="cursor-pointer transition-all hover:shadow-md"
+            [ngClass]="{'ring-2 ring-blue-500 shadow-lg': selectedLocationId === location.id}"
+          >
+            <app-card-content class="p-5">
+              <div class="flex items-start">
+                <div class="p-3 rounded-full mr-4" [ngClass]="selectedLocationId === location.id ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'">
+                  <i-feather [name]="location.icon" class="h-6 w-6"></i-feather>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-lg text-gray-900">{{ location.name }}</h3>
+                    <i-feather name="map-pin" class="h-4 w-4 text-blue-500"></i-feather>
+                  </div>
+                  <p class="text-sm text-gray-500 mt-1">{{ location.description }}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <span *ngFor="let scenario of location.scenarios" class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                      {{ scenario }}
+                    </span>
+                  </div>
+                  <div class="mt-4 flex items-center justify-between text-sm">
+                    <div class="flex items-center text-orange-500">
+                      <i-feather name="star" class="h-4 w-4 mr-1"></i-feather>
+                      <span>{{ location.difficulty }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-500">
+                      <i-feather name="clock" class="h-4 w-4 mr-1"></i-feather>
+                      <span>{{ location.time }}</span>
+                    </div>
+                    <div class="flex items-center text-blue-600">
+                      <i-feather name="message-square" class="h-4 w-4 mr-1"></i-feather>
+                      <span>{{ location.points }} XP</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </app-card-content>
+          </app-card>
+        </div>
+        <div class="mt-6 flex justify-center">
+          <button
+            type="button"
+            (click)="startChallenge()"
+            [disabled]="!selectedLocationId"
+            class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-[#0993B2] text-white hover:bg-[#077d96] h-11 px-6 text-lg"
+          >
+            <i-feather name="chevron-right" class="h-5 w-5 mr-2"></i-feather>
+            Start Challenge
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHALLENGE STATE -->
+  <div *ngIf="gameState === 'challenge' && selectedLocation" class="space-y-6">
+    <div class="bg-white rounded-lg p-6 shadow-md">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ selectedLocation.name }} Challenge</h2>
+      <p class="text-gray-700 mb-6">{{ selectedLocation.challenge.prompt }}</p>
+      <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <h3 class="text-sm font-medium text-gray-700 mb-2">Key Terms to Include:</h3>
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let keyword of selectedLocation.challenge.keywords" class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+            {{ keyword }}
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col items-center space-y-4">
+        <ng-container *ngIf="!recordingComplete; else recordingControls">
+          <button (click)="isRecording ? stopRecording() : startRecording()" class="w-16 h-16 rounded-full flex items-center justify-center transition-colors" [ngClass]="isRecording ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'">
+            <i-feather *ngIf="!isRecording" name="mic" class="h-8 w-8"></i-feather>
+            <i-feather *ngIf="isRecording" name="stop-circle" class="h-8 w-8"></i-feather>
+          </button>
+        </ng-container>
+        <ng-template #recordingControls>
+          <div class="flex space-x-4">
+            <button (click)="playRecording()" class="w-12 h-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center">
+              <i-feather name="play" class="h-6 w-6"></i-feather>
+            </button>
+            <button (click)="startRecording()" class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+              <i-feather name="mic" class="h-6 w-6"></i-feather>
+            </button>
+          </div>
+        </ng-template>
+        <p class="text-sm text-gray-500">
+          {{ isRecording ? 'Recording... Speak clearly' : recordingComplete ? 'Recording complete' : 'Click to start recording' }}
+        </p>
+      </div>
+      <div class="mt-8 flex justify-between">
+        <app-button variant="outline" (click)="resetGame()">Cancel</app-button>
+        <button
+          type="button"
+          (click)="completeChallenge()"
+          [disabled]="!recordingComplete"
+          class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-[#0993B2] text-white hover:bg-[#077d96] h-10 px-4"
+        >
+          Submit Response
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK STATE -->
+  <div *ngIf="gameState === 'feedback' && feedback" class="space-y-6">
+    <div class="bg-white rounded-lg p-6 shadow-md">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Performance Analysis</h2>
+      <div class="space-y-4 mb-6">
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span>Pronunciation</span>
+            <span>{{ feedback.pronunciation }}%</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full">
+            <div class="h-2 bg-green-500 rounded-full" [style.width.%]="feedback.pronunciation"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span>Fluency</span>
+            <span>{{ feedback.fluency }}%</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full">
+            <div class="h-2 bg-blue-500 rounded-full" [style.width.%]="feedback.fluency"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span>Grammar</span>
+            <span>{{ feedback.grammar }}%</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full">
+            <div class="h-2 bg-purple-500 rounded-full" [style.width.%]="feedback.grammar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-blue-50 p-4 rounded-lg mb-6">
+        <h3 class="text-sm font-medium text-blue-900 mb-2">Suggestions for Improvement:</h3>
+        <ul class="space-y-2">
+          <li *ngFor="let suggestion of feedback.suggestions" class="flex items-start text-sm text-blue-700">
+            <i-feather name="brain" class="h-4 w-4 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+            {{ suggestion }}
+          </li>
+        </ul>
+      </div>
+      <div class="flex justify-between">
+        <app-button variant="outline" (click)="retryChallenge()">Try Again</app-button>
+        <app-button variant="primary" (click)="resetGame()">Choose New Location</app-button>
+      </div>
+    </div>
+  </div>
+</div>

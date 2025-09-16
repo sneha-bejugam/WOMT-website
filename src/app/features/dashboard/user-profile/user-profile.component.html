@@ -1,0 +1,36 @@
+<app-card *ngIf="currentUser" >
+  <app-card-content class="p-6">
+    <div class="flex flex-col items-center text-center">
+      <app-avatar
+        [src]="currentUser.avatar"
+        [alt]="currentUser.name"
+        size="xl"
+        className="mb-4"
+      ></app-avatar>
+      <h2 class="text-xl font-bold text-gray-900">Sneha Bejugam</h2>
+      <div class="flex items-center text-gray-500 mt-1">
+        <i-feather name="briefcase" class="h-4 w-4 mr-1"></i-feather>
+        <p>{{ currentUser.profession }}</p>
+      </div>
+
+      <div class="mt-4 flex items-center justify-center">
+        <div class="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+          <i-feather name="award" class="h-4 w-4 mr-1"></i-feather>
+          <span class="text-sm font-medium">Level {{ currentUser.level }}</span>
+        </div>
+      </div>
+
+      <div class="mt-6 w-full">
+        <div class="flex justify-between text-sm mb-1">
+          <span>XP: {{ currentUser.points }}</span>
+          <span>Next: {{ nextLevelXP }}</span>
+        </div>
+        <app-progress-bar
+          [value]="xpProgress"
+          [showValue]="false"
+          color="blue"
+        ></app-progress-bar>
+      </div>
+    </div>
+  </app-card-content>
+</app-card>

@@ -1,0 +1,151 @@
+<div class="min-h-screen bg-white">
+  <!-- Static Navbar -->
+  <app-nav-bar></app-nav-bar>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-blue-800 to-blue-900 text-white py-16 relative overflow-hidden">
+    <!-- Background watermark image -->
+    <div class="absolute inset-0 opacity-10">
+      <img
+        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
+        alt="Team collaboration"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <h1 class="text-4xl font-bold mb-4">About WOMT</h1>
+      <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+        Empowering global professionals and students to master English communication through AI-powered learning.
+      </p>
+    </div>
+  </section>
+
+  <!-- Vision & Mission -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-sm font-semibold text-blue-600 uppercase tracking-wide">OUR VISION & MISSION</h2>
+        <h3 class="mt-2 text-3xl font-bold text-gray-900">Breaking Language Barriers</h3>
+        <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+          We're dedicated to helping expatriate professionals and students master English communication skills through innovative AI technology and personalized learning experiences.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <app-card class="bg-white">
+          <app-card-content class="p-6">
+            <div class="p-3 bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+              <i-feather name="book-open" class="h-6 w-6 text-blue-600"></i-feather>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Excellence in Education</h3>
+            <p class="text-gray-600">
+              Our AI-powered platform delivers personalized learning experiences that adapt to your unique needs and goals.
+            </p>
+          </app-card-content>
+        </app-card>
+
+        <app-card class="bg-white">
+          <app-card-content class="p-6">
+            <div class="p-3 bg-green-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+              <i-feather name="globe" class="h-6 w-6 text-green-600"></i-feather>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Global Community</h3>
+            <p class="text-gray-600">
+              Join a diverse community of learners from around the world, sharing experiences and cultural perspectives.
+            </p>
+          </app-card-content>
+        </app-card>
+
+        <app-card class="bg-white">
+          <app-card-content class="p-6">
+            <div class="p-3 bg-orange-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+              <i-feather name="users" class="h-6 w-6 text-orange-600"></i-feather>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Cultural Integration</h3>
+            <p class="text-gray-600">
+              Learn not just the language, but also the cultural nuances essential for success in English-speaking environments.
+            </p>
+          </app-card-content>
+        </app-card>
+
+        <app-card class="bg-white">
+          <app-card-content class="p-6">
+            <div class="p-3 bg-purple-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+              <i-feather name="framer" class="h-6 w-6 text-purple-600"></i-feather>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Innovative Learning</h3>
+            <p class="text-gray-600">
+              Cutting-edge AI technology provides real-time feedback and personalized learning paths for optimal results.
+            </p>
+          </app-card-content>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Technology -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-gray-900">Our Technology</h2>
+        <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+          Powered by cutting-edge AI and machine learning
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <app-card class="bg-white">
+          <app-card-content class="p-6">
+            <div class="p-3 bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+              <i-feather name="monitor" class="h-6 w-6 text-blue-600"></i-feather>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Machine Learning</h3>
+            <p class="text-gray-600">
+              Our AI engine analyzes speech patterns, pronunciation, and fluency in real-time, providing instant feedback for improvement.
+            </p>
+          </app-card-content>
+        </app-card>
+
+        <app-card class="bg-white">
+          <app-card-content class="p-6">
+            <div class="p-3 bg-green-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+              <i-feather name="users" class="h-6 w-6 text-green-600"></i-feather>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Personalized Learning</h3>
+            <p class="text-gray-600">
+              Adaptive algorithms create customized learning paths based on your progress, ensuring optimal learning outcomes.
+            </p>
+          </app-card-content>
+        </app-card>
+
+        <app-card class="bg-white">
+          <app-card-content class="p-6">
+            <div class="p-3 bg-orange-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+              <i-feather name="message-square" class="h-6 w-6 text-orange-600"></i-feather>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Real-time Feedback</h3>
+            <p class="text-gray-600">
+              Get immediate feedback on pronunciation, grammar, and speaking confidence to accelerate your learning journey.
+            </p>
+          </app-card-content>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-blue-600 py-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        Join our global community today.
+      </p>
+      <app-button variant="secondary" size="lg" (click)="goToSignupPage()">
+        Get Started
+     </app-button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <app-footer></app-footer>

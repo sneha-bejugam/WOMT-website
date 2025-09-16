@@ -1,0 +1,24 @@
+<!-- This container applies the dynamic size and any extra classes passed in -->
+<div 
+  class="relative rounded-full overflow-hidden" 
+  [ngClass]="[getSizeClasses(), className]">
+
+  <!-- Use *ngIf to check if the 'src' property exists -->
+  <ng-container *ngIf="src; else fallback">
+    <!-- If 'src' exists, display the image -->
+    <img
+      [src]="src"
+      [alt]="alt"
+      class="h-full w-full object-cover"
+    />
+  </ng-container>
+
+  <!-- The #fallback template is rendered if 'src' is null or undefined -->
+  <ng-template #fallback>
+    <div class="bg-gray-100 flex items-center justify-center h-full w-full">
+      <!-- The <i-feather> component is used for the fallback icon -->
+      <i-feather name="user" class="h-1/2 w-1/2 text-gray-500"></i-feather>
+    </div>
+  </ng-template>
+
+</div>

@@ -1,0 +1,146 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Lessons</h1>
+    <p class="text-gray-500 mt-1">
+      Browse our collection of business English lessons to improve your professional communication skills.
+    </p>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm p-4">
+  <div class="flex flex-col md:flex-row gap-4">
+    <!-- Search Input -->
+    <div class="relative flex-1">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <i-feather name="search" class="h-5 w-5 text-gray-400"></i-feather>
+      </div>
+      <input
+        type="text"
+        placeholder="Search lessons..."
+        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onFilterChange()"
+      />
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-2">
+      <div class="relative">
+        <select
+          class="appearance-none block w-full md:w-48 pl-3 pr-10 py-2 border border-gray-300 rounded-md bg-white text-left focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          [(ngModel)]="selectedCategory"
+          (ngModelChange)="onFilterChange()"
+        >
+          <option [ngValue]="null">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.label }}
+          </option>
+        </select>
+        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+          <i-feather name="chevron-down" class="h-5 w-5 text-gray-400"></i-feather>
+        </div>
+      </div>
+      <div class="relative">
+        <select
+          class="appearance-none block w-full md:w-48 pl-3 pr-10 py-2 border border-gray-300 rounded-md bg-white text-left focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          [(ngModel)]="selectedDifficulty"
+          (ngModelChange)="onFilterChange()"
+        >
+          <option [ngValue]="null">All Levels</option>
+          <option *ngFor="let difficulty of difficulties" [value]="difficulty.id">
+            {{ difficulty.label }}
+          </option>
+        </select>
+        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+          <i-feather name="chevron-down" class="h-5 w-5 text-gray-400"></i-feather>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lessons grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- THE FIX: Added 'flex' and 'flex-col' to make the card a flex container -->
+  <app-card
+    *ngFor="let lesson of filteredLessons"
+    class="bg-white transition-all hover:shadow-md flex flex-col"
+    [ngClass]="{'border-green-200': lesson.completed}"
+  >
+    <div class="relative h-40 overflow-hidden rounded-t-lg">
+      <img [src]="lesson.image" [alt]="lesson.title" class="w-full h-full object-cover" />
+      <div *ngIf="lesson.completed" class="absolute top-2 right-2 bg-green-500 text-white rounded-full p-1">
+        <i-feather name="check-circle" class="h-5 w-5"></i-feather>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+        <app-badge [variant]="lesson.difficulty === 'beginner' ? 'success' : lesson.difficulty === 'intermediate' ? 'warning' : 'danger'">
+          {{ lesson.difficulty.charAt(0).toUpperCase() + lesson.difficulty.slice(1) }}
+        </app-badge>
+      </div>
+    </div>
+
+    <!-- THE FIX: Added 'flex', 'flex-col', and 'flex-grow' to make this section fill available space -->
+    <app-card-content class="p-4 flex flex-col flex-grow">
+      <div class="flex justify-between items-start mb-2">
+        <h3 class="font-semibold text-gray-900">{{ lesson.title }}</h3>
+        <app-badge variant="secondary">
+          {{ lesson.category.charAt(0).toUpperCase() + lesson.category.slice(1) }}
+        </app-badge>
+      </div>
+
+      <p class="text-sm text-gray-600 mb-4 h-10 overflow-hidden">{{ lesson.description }}</p>
+
+      <div class="flex items-center justify-between text-sm text-gray-500">
+        <div class="flex items-center">
+          <i-feather name="clock" class="h-4 w-4 mr-1"></i-feather>
+          <span>{{ lesson.duration }} min</span>
+        </div>
+        <div class="flex items-center">
+          <i-feather name="bar-chart" class="h-4 w-4 mr-1"></i-feather>
+          <span>{{ lesson.points }} XP</span>
+        </div>
+        <div class="flex items-center">
+          <i-feather name="book-open" class="h-4 w-4 mr-1"></i-feather>
+          <span>{{ lesson.steps.length }} steps</span>
+        </div>
+      </div>
+
+      <!-- THE FIX: Added 'mt-auto' to push the button block to the bottom -->
+      <div class="mt-auto pt-4">
+        <!-- THIS IS THE FIX: This container now has a fixed height to prevent layout shifts -->
+        <div class="mb-4 h-9">
+          <div *ngIf="lesson.progress > 0 && !lesson.completed">
+            <div class="flex justify-between text-xs mb-1">
+              <span>Progress</span>
+              <span>{{ lesson.progress }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-1.5">
+              <div class="bg-blue-600 h-1.5 rounded-full" [style.width.%]="lesson.progress"></div>
+            </div>
+          </div>
+        </div>
+
+        <app-button
+          [variant]="lesson.completed ? 'secondary' : 'primary'"
+          [fullWidth]="true"
+          (click)="gotolesson(lesson.id)"
+        >
+          {{ lesson.completed ? "Review Lesson" : (lesson.progress > 0 ? "Continue" : "Start Lesson") }}
+          <i-feather name="chevron-right" icon class="h-4 w-4 ml-2"></i-feather>
+        </app-button>
+      </div>
+    </app-card-content>
+  </app-card>
+</div>
+
+<!-- No results message -->
+<div *ngIf="filteredLessons.length === 0" class="bg-white rounded-lg shadow-sm p-8 text-center">
+  <i-feather name="book-open" class="h-12 w-12 text-gray-400 mx-auto mb-4"></i-feather>
+  <h3 class="text-lg font-medium text-gray-900 mb-2">No lessons found</h3>
+  <p class="text-gray-600 mb-4">
+    We couldn't find any lessons matching your search criteria. Try adjusting your filters or search query.
+  </p>
+  <button (click)="clearFilters()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
+    Clear Filters
+  </button>
+</div>
+

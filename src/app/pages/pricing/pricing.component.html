@@ -1,0 +1,232 @@
+<div class="min-h-screen bg-gray-50">
+  <app-nav-bar></app-nav-bar>
+
+  <!-- Hero Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold text-gray-900">Simple, Transparent Pricing</h1>
+        <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+          Choose the plan that best fits your learning needs. All plans include access to our core features.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Tiers -->
+  <section class="py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Free Tier -->
+        <div class="bg-white rounded-lg shadow-md p-8 border border-gray-200 flex flex-col">
+          <div class="flex-grow">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Free Tier</h3>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">$0</span>
+              <span class="text-gray-500">/month</span>
+            </div>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Limited access to basic lessons</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>AI-driven pronunciation feedback (few sessions/month)</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Community forum access</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Daily word & phrase suggestions</span>
+              </li>
+            </ul>
+          </div>
+          <app-button variant="outline" [fullWidth]="true" className="py-2.5 whitespace-nowrap" (click)="goToSignupPage()">
+            Activate Plan
+         </app-button>
+        </div>
+
+        <!-- Essential Plan -->
+        <div class="bg-white rounded-lg shadow-md p-8 border border-gray-200 flex flex-col">
+          <div class="flex-grow">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Essential Plan</h3>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">$9.99</span>
+              <span class="text-gray-500">/month</span>
+              <p class="text-sm text-gray-500 mt-1">or $99/year</p>
+            </div>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Full access to structured lessons</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>AI-powered pronunciation & fluency analysis</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Real-time feedback with limited advanced exercises</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Interactive exercises & quizzes</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Progress tracking dashboard</span>
+              </li>
+            </ul>
+          </div>
+          <app-button variant="outline" [fullWidth]="true" className="py-2.5 whitespace-nowrap" (click)="goToSignupPage()">
+            Activate Plan
+         </app-button>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="bg-white rounded-lg shadow-md p-8 border-2 border-blue-500 relative flex flex-col">
+          <div class="absolute top-0 right-0 bg-blue-500 text-white px-3 py-1 text-sm font-medium rounded-bl-lg rounded-tr-lg">
+            Most Popular
+          </div>
+          <div class="flex-grow">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Pro Plan</h3>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">$19.99</span>
+              <span class="text-gray-500">/month</span>
+              <p class="text-sm text-gray-500 mt-1">or $199/year</p>
+            </div>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Everything in Essential Plan</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Unlimited AI feedback sessions</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Personalized learning paths</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Business & workplace communication modules</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Accent reduction & fluency training</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Gamified challenges & progress analytics</span>
+              </li>
+            </ul>
+          </div>
+          <app-button variant="outline" [fullWidth]="true" className="py-2.5 whitespace-nowrap" (click)="goToSignupPage()">
+            Activate Plan
+         </app-button>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="bg-gray-900 rounded-lg shadow-md p-8 text-white flex flex-col">
+          <div class="flex-grow">
+            <h3 class="text-xl font-semibold mb-4">Enterprise Plan</h3>
+            <div class="mb-6">
+              <span class="text-4xl font-bold">Custom</span>
+              <p class="text-sm text-gray-300 mt-1">Bulk discounts available</p>
+            </div>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-400 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Everything in Pro Plan</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-400 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Dedicated account manager</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-400 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Team collaboration tools & reporting</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-400 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>API integration for corporate training platforms</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-400 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Custom lesson creation for specific industries</span>
+              </li>
+              <li class="flex items-start">
+                <i-feather name="check" class="h-5 w-5 text-green-400 mr-2 mt-0.5 flex-shrink-0"></i-feather>
+                <span>Live coaching sessions (optional add-on)</span>
+              </li>
+            </ul>
+          </div>
+          <app-button variant="outline" [fullWidth]="true" className="py-2.5 whitespace-nowrap" (click)="goToSignupPage()">
+            Contact Sales
+         </app-button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add-ons Section -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Additional Services</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 bg-gray-50 rounded-lg">
+          <i-feather name="star" class="h-8 w-8 text-yellow-500 mb-4"></i-feather>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Pronunciation Coaching Sessions</h3>
+          <p class="text-gray-600 mb-4">1-on-1 sessions with expert coaches</p>
+          <p class="text-2xl font-bold text-gray-900">$49</p>
+          <p class="text-sm text-gray-500">per session</p>
+        </div>
+
+        <div class="p-6 bg-gray-50 rounded-lg">
+          <i-feather name="users" class="h-8 w-8 text-blue-500 mb-4"></i-feather>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Intensive Fluency Booster Course</h3>
+          <p class="text-gray-600 mb-4">6-week structured course</p>
+          <p class="text-2xl font-bold text-gray-900">$99</p>
+          <p class="text-sm text-gray-500">one-time purchase</p>
+        </div>
+
+        <div class="p-6 bg-gray-50 rounded-lg">
+          <i-feather name="briefcase" class="h-8 w-8 text-purple-500 mb-4"></i-feather>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Industry-Specific Training Modules</h3>
+          <p class="text-gray-600 mb-4">Specialized vocabulary and scenarios</p>
+          <p class="text-2xl font-bold text-gray-900">$29</p>
+          <p class="text-sm text-gray-500">per module</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Can I switch plans at any time?</h3>
+          <p class="text-gray-600">Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Is there a refund policy?</h3>
+          <p class="text-gray-600">We offer a 30-day money-back guarantee for all paid plans if you're not satisfied with our service.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Do you offer student discounts?</h3>
+          <p class="text-gray-600">Yes, students with valid .edu email addresses can receive a 20% discount on any paid plan.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">What payment methods do you accept?</h3>
+          <p class="text-gray-600">We accept all major credit cards, PayPal, and bank transfers for enterprise customers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

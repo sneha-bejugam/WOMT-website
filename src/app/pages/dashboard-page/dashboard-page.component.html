@@ -1,0 +1,66 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+     <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1> 
+    <!-- <div>
+      <app-button variant="secondary" size="sm" (click)="goToLessonsPage()">
+        <i-feather name="book-open" class="h-6 w-4 mr-2"></i-feather>
+        Browse Lessons
+      </app-button>
+    </div> -->
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="md:col-span-1">
+      <app-user-profile></app-user-profile>
+    </div>
+    <div class="md:col-span-1">
+      <app-leaderboard></app-leaderboard>
+    </div>
+  </div>
+
+  <!-- Featured Lessons -->
+   <div>
+  <app-card class>
+    <app-card-header class="flex flex-row items-center justify-between mt-2">
+      <app-card-title>Featured Lessons</app-card-title>
+      <a routerLink="/lessons" class="text-sm text-blue-600 hover:text-blue-700">
+        View all lessons
+      </a>
+    </app-card-header>
+    <app-card-content>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a *ngFor="let lesson of featuredLessons" [routerLink]="['/lessons', lesson.id]" class="block">
+          <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+            <div class="h-32 overflow-hidden">
+              <img
+                [src]="lesson.image"
+                [alt]="lesson.title"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-3">
+              <h3 class="font-medium text-gray-900 mb-1 truncate">{{ lesson.title }}</h3>
+              <p class="text-xs text-gray-500 mb-2 h-8 overflow-hidden">{{ lesson.description }}</p>
+              <div class="flex justify-between text-xs text-gray-500">
+                <span>{{ lesson.duration }} min</span>
+                <span>{{ lesson.points }} XP</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </app-card-content>
+  </app-card>
+  </div>
+
+  <div >
+    <div >
+      <app-recent-lessons></app-recent-lessons>
+    </div>
+
+  </div>
+
+  <!-- <div>
+    <app-achievement-badges></app-achievement-badges>
+  </div> -->
+</div>

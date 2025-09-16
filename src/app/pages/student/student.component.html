@@ -1,0 +1,127 @@
+<div class="min-h-screen bg-white">
+  <app-nav-bar></app-nav-bar>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-blue-800 to-blue-900 text-white py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <img
+        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
+        alt="Students studying"
+        class="w-full h-full object-cover"
+      />
+    </div>
+     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl font-bold mb-4">Solutions for Expat Students</h1>
+        <p class="text-xl text-blue-100 mb-8">
+          Master academic English and thrive in your studies abroad with our AI-powered learning platform.
+        </p>
+        <app-button variant="primary" size="lg" (click)="goToSignupPage()">
+          Start Your Journey
+       </app-button>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Business Communication -->
+        <div class="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+          <div class="p-3 bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+            <i-feather name="award" class="h-6 w-6 text-blue-600"></i-feather>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Academic Excellence</h3>
+          <p class="text-gray-600 mb-4">
+            Comprehensive language training focused on academic success.
+          </p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-start">
+              <i-feather name="check-circle" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5"></i-feather>
+              <span>
+      Classroom communication skills</span>
+            </li>
+            <li class="flex items-start">
+              <i-feather name="check-circle" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5"></i-feather>
+              <span>Academic writing and presentation</span>
+            </li>
+            <li class="flex items-start">
+              <i-feather name="check-circle" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5"></i-feather>
+              <span>
+              Research and study terminology</span>
+            </li>
+          </ul>
+          <a routerLink="/solutions/business" class="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center">
+            Learn more <i-feather name="chevron-right" class="h-4 w-4 ml-1"></i-feather>
+          </a>
+        </div>
+
+        <!-- Career Advancement -->
+        <div class="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+          <div class="p-3 bg-green-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+            <i-feather name="Monitor" class="h-6 w-6 text-green-600"></i-feather>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">AI-Powered Learning</h3>
+          <p class="text-gray-600 mb-4">
+           Personalized learning experience with advanced AI technology.
+          </p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-start">
+              <i-feather name="check-circle" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5"></i-feather>
+              <span>Real-time pronunciation feedback</span>
+            </li>
+            <li class="flex items-start">
+              <i-feather name="check-circle" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5"></i-feather>
+              <span>Adaptive learning paths</span>
+            </li>
+            <li class="flex items-start">
+              <i-feather name="check-circle" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5"></i-feather>
+              <span>Progress tracking and analytics</span>
+            </li>
+          </ul>
+          <a routerLink="/solutions/career" class="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center">
+            Learn more <i-feather name="chevron-right" class="h-4 w-4 ml-1"></i-feather>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Student Success Stories -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900">Student Success Stories</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <app-card *ngFor="let story of studentStories" class="bg-white">
+          <app-card-content class="p-6">
+            <div class="flex items-center mb-4">
+              <app-avatar [src]="story.avatar" [alt]="story.name" size="md" className="mr-4"></app-avatar>
+              <div>
+                <h4 class="font-semibold text-gray-900">{{ story.name }}</h4>
+                <p class="text-sm text-gray-500">{{ story.university }}</p>
+                <p class="text-xs text-gray-400">{{ story.country }}</p>
+              </div>
+            </div>
+            <p class="text-gray-600 italic">{{ story.testimonial }}</p>
+          </app-card-content>
+        </app-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center bg-blue-50 rounded-lg p-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Excel in Your Studies?</h2>
+      <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+        Join thousands of successful international students who have mastered academic English with WOMT.
+      </p>
+     <app-button variant="primary" size="lg" (click)="goToSignupPage()">
+          Start Your Journey
+       </app-button>
+    </div>
+  </section>
+</div>
+ <app-footer></app-footer>

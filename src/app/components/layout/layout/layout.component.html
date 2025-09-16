@@ -1,0 +1,16 @@
+<div class="flex h-screen bg-gray-100">
+  <!-- Fixed Sidebar - Always visible on desktop -->
+  <app-sidebar [isOpen]="true"></app-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col overflow-hidden ml-64">
+    <!-- Header -->
+    <app-header (sidebarToggled)="toggleSidebar()"></app-header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+      <!-- The <router-outlet> is where the content of your pages (Dashboard, Chat, etc.) will be displayed -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

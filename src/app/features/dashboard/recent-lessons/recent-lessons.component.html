@@ -1,0 +1,46 @@
+<app-card>
+  <app-card-header class="flex items-center gap-4">
+    <div class="flex-1">
+      <app-card-title>Recent Lessons</app-card-title>
+    </div>
+
+    <!-- <app-button variant="outline" size="sm" (click)="viewAllLessons()">
+      View All
+      <i-feather name="chevron-right" class="h-4 w-4 ml-1"></i-feather>
+    </app-button> -->
+  </app-card-header>
+
+  <app-card-content>
+    <ul class="space-y-4">
+      <li *ngFor="let lesson of recentLessons" class="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+        <div class="flex items-start">
+          <div class="flex-shrink-0 mr-3">
+            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+              <i-feather name="book-open" class="h-5 w-5 text-blue-600"></i-feather>
+            </div>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-medium text-gray-900">{{ lesson.title }}</h4>
+              <i-feather *ngIf="lesson.completed" name="check-circle" class="h-4 w-4 text-green-500"></i-feather>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">{{ lesson.description }}</p>
+            <div class="mt-2 flex items-center space-x-2">
+              <app-badge [variant]="getCategoryBadgeInfo(lesson.category).variant">
+                {{ getCategoryBadgeInfo(lesson.category).label }}
+              </app-badge>
+              <div class="flex items-center text-xs text-gray-500">
+                <i-feather name="clock" class="h-3 w-3 mr-1"></i-feather>
+                {{ lesson.duration }} min
+              </div>
+              <div class="flex items-center text-xs text-gray-500">
+                <i-feather name="award" class="h-3 w-3 mr-1"></i-feather>
+                {{ lesson.points }} XP
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </app-card-content>
+</app-card>

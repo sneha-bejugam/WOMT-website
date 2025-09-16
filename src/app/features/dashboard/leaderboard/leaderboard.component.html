@@ -1,0 +1,31 @@
+<app-card>
+  <app-card-header>
+    <app-card-title>Leaderboard</app-card-title>
+  </app-card-header>
+  <app-card-content>
+    <ul class="space-y-4">
+      <!-- Use *ngFor to loop through the leaderboard array; 'let i = index' gets the index of each item -->
+      <li *ngFor="let user of leaderboard; let i = index" class="flex items-center">
+        <div class="flex-shrink-0 mr-3 text-gray-500 w-5 text-center">
+          <!-- Use *ngIf to check if the user is at index 0 (the winner) -->
+          <ng-container *ngIf="i === 0; else rankNumber">
+            <i-feather name="award" class="h-5 w-5 text-yellow-500"></i-feather>
+          </ng-container>
+          <!-- The #rankNumber template is shown for all other users -->
+          <ng-template #rankNumber>
+            <span>{{ i + 1 }}</span>
+          </ng-template>
+        </div>
+        <app-avatar [src]="user.avatar" [alt]="user.name" size="sm" className="mr-3"></app-avatar>
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-medium text-gray-900 truncate">{{user.name}}</p>
+        </div>
+        <div class="flex-shrink-0">
+          <app-badge variant="default">
+            {{ user.points }} XP
+          </app-badge>
+        </div>
+      </li>
+    </ul>
+  </app-card-content>
+</app-card>

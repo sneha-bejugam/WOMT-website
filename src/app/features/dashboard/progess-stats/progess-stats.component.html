@@ -1,0 +1,107 @@
+<app-card>
+  <app-card-header>
+    <app-card-title>Your Skill Profile</app-card-title>
+  </app-card-header>
+  <app-card-content>
+    <!-- Use a more refined spacing for the list -->
+    <div class="space-y-5">
+      <!-- Loop through each progress item -->
+      <div *ngFor="let item of progressItems" class="flex items-center gap-4">
+        <!-- Circular icon background, dynamically colored -->
+        <div
+          class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full"
+          [ngClass]="getIconBgColor(item.color)"
+        >
+          <!-- Icon, dynamically selected and colored -->
+          <i-feather
+            [name]="getIconName(item.label)"
+            class="h-5 w-5"
+            [ngClass]="getIconTextColor(item.color)"
+          ></i-feather>
+        </div>
+
+        <!-- Progress bar and labels, takes up remaining space -->
+        <div class="flex-1">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-sm font-medium text-gray-800">{{ item.label }}</span>
+            <span
+              class="text-sm font-semibold"
+              [ngClass]="getIconTextColor(item.color)"
+            >
+              {{ item.value }}%
+            </span>
+          </div>
+          <app-progress-bar
+            [value]="item.value"
+            [color]="item.color"
+            [showValue]="false"
+            size="sm"
+          ></app-progress-bar>
+        </div>
+      </div>
+    </div>
+  </app-card-content>
+</app-card>
+<div class = "mt-6">
+    <app-achievement-badges></app-achievement-badges>
+  </div>
+  <!-- <div class = "mt-6">
+    <div class = "grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="md:col-span-1">
+        <app-card>
+          <app-card-content>
+        Level Reached : Level {{ currentUser.level }}
+        </app-card-content>
+        </app-card>
+      </div>
+      <div class="md:col-span-1">
+        <app-card>
+          <app-card-content>
+        Total XP : {{ currentUser.points }}
+        </app-card-content>
+        </app-card>
+      </div>
+    </div>
+</div> -->
+<div class="mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Level Card -->
+    <div class="md:col-span-1">
+      <app-card>
+        <app-card-content>
+          <div class="flex items-center p-4">
+            <div class="flex-shrink-0 mr-4">
+              <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <i-feather name="award" class="h-6 w-6 text-blue-600"></i-feather>
+              </div>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Level Reached</p>
+              <p class="text-2xl font-bold text-gray-900">Level {{ currentUser.level }}</p>
+            </div>
+          </div>
+        </app-card-content>
+      </app-card>
+    </div>
+
+    <!-- XP Card -->
+    <div class="md:col-span-1">
+      <app-card>
+        <app-card-content>
+          <div class="flex items-center p-4">
+            <div class="flex-shrink-0 mr-4">
+              <div class="h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center">
+                <i-feather name="star" class="h-6 w-6 text-yellow-500"></i-feather>
+              </div>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Total XP</p>
+              <p class="text-2xl font-bold text-gray-900">{{ currentUser.points }}</p>
+            </div>
+          </div>
+        </app-card-content>
+      </app-card>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,130 @@
+<div class="bg-gray-50 min-h-full p-4 sm:p-6 lg:p-8">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-16">
+    <div class="animate-pulse flex flex-col items-center space-y-4">
+      <div class="h-24 w-24 bg-gray-300 rounded-full"></div>
+      <div class="h-8 w-56 bg-gray-300 rounded mt-4"></div>
+      <div class="h-6 w-72 bg-gray-300 rounded"></div>
+    </div>
+    <p class="mt-6 text-gray-500">Loading your profile...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="text-center py-16">
+    <div class="bg-red-50 p-6 rounded-lg max-w-lg mx-auto border border-red-200">
+      <i-feather name="alert-triangle" class="h-10 w-10 text-red-500 mx-auto mb-4"></i-feather>
+      <h2 class="text-xl font-semibold text-red-800">An Error Occurred</h2>
+      <p class="mt-2 text-red-700">{{ errorMessage }}</p>
+    </div>
+  </div>
+
+  <!-- Content State -->
+  <div *ngIf="userProfile && !isLoading" class="max-w-7xl mx-auto">
+    <!-- Profile Header Card -->
+    <app-card class="mb-8 shadow-sm">
+      <app-card-content class="p-6">
+        <div class="flex flex-col md:flex-row items-center">
+          <!-- Avatar -->
+          <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-5xl font-bold flex-shrink-0">
+            {{ userProfile.fullName.charAt(0) }}
+          </div>
+          
+          <!-- User Info -->
+          <div class="text-center md:text-left mt-4 md:mt-0 md:ml-6 flex-grow">
+            <h1 class="text-3xl font-bold text-slate-800 tracking-tight">{{ userProfile.fullName }}</h1>
+            <p class="mt-1 text-lg text-slate-500">{{ userProfile.profession }}</p>
+            <p class="mt-2 text-sm text-slate-400">{{ userProfile.email }}</p>
+          </div>
+
+          <!-- Key Stats -->
+          <div class="flex items-center space-x-12 mt-6 md:mt-0 md:ml-auto">
+            <div class="text-center">
+              <div class="p-3 bg-blue-100 rounded-full inline-flex border-2 border-white ring-2 ring-blue-200">
+                <i-feather name="award" class="h-6 w-6 text-blue-600"></i-feather>
+              </div>
+              <p class="mt-2 text-lg font-bold text-slate-800">{{ formatProficiency(userProfile.proficiencyLevel) }}</p>
+              <p class="text-sm text-slate-500">Proficiency</p>
+            </div>
+            <div class="text-center">
+              <div class="p-3 bg-green-100 rounded-full inline-flex border-2 border-white ring-2 ring-green-200">
+                <i-feather name="globe" class="h-6 w-6 text-green-600"></i-feather>
+              </div>
+              <p class="mt-2 text-lg font-bold text-slate-800">{{ userProfile.nativeLanguage }}</p>
+              <p class="text-sm text-slate-500">Native Language</p>
+            </div>
+          </div>
+        </div>
+      </app-card-content>
+    </app-card>
+
+    <!-- Main Grid -->
+    <div>
+      <!-- Learning Goals (Left Column) -->
+      <div class="mt-6">
+        <app-card class="shadow-sm h-full">
+          <app-card-content class="p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-5 flex items-center">
+              <i-feather name="target" class="h-5 w-5 mr-3 text-indigo-600"></i-feather>
+              Learning Goals
+            </h2>
+            <div class="flex flex-wrap gap-3">
+              <app-badge *ngFor="let goal of userProfile.learningGoals" variant="secondary" class="py-2 px-4 text-base">
+                {{ goal }}
+              </app-badge>
+            </div>
+          </app-card-content>
+        </app-card>
+      </div>
+
+      <!-- Baseline Assessment (Right Column) -->
+      <div class="mt-6">
+        <app-card class="shadow-sm h-full">
+          <app-card-content class="p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
+              <i-feather name="bar-chart-2" class="h-5 w-5 mr-3 text-indigo-600"></i-feather>
+              Baseline Assessment
+            </h2>
+            <div *ngIf="userProfile.baselineAssessment; else noAssessment" class="space-y-5">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-medium text-slate-600">Pronunciation</span>
+                  <span class="font-semibold text-slate-800">{{ userProfile.baselineAssessment.pronunciation }}%</span>
+                </div>
+                <app-progress-bar [value]="userProfile.baselineAssessment.pronunciation" color="blue" [showValue]="false"></app-progress-bar>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-medium text-slate-600">Fluency</span>
+                  <span class="font-semibold text-slate-800">{{ userProfile.baselineAssessment.fluency }}%</span>
+                </div>
+                <app-progress-bar [value]="userProfile.baselineAssessment.fluency" color="green" [showValue]="false"></app-progress-bar>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-medium text-slate-600">Grammar</span>
+                  <span class="font-semibold text-slate-800">{{ userProfile.baselineAssessment.grammar }}%</span>
+                </div>
+                <app-progress-bar [value]="userProfile.baselineAssessment.grammar" color="orange" [showValue]="false"></app-progress-bar>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-medium text-slate-600">Over all score</span>
+                  <span class="font-semibold text-slate-800">{{ userProfile.baselineAssessment.overall }}%</span>
+                </div>
+                <app-progress-bar [value]="userProfile.baselineAssessment.overall" color="purple" [showValue]="false"></app-progress-bar>
+              </div>
+            </div>
+            <ng-template #noAssessment>
+              <div class="text-center py-8 bg-slate-50 rounded-lg">
+                <i-feather name="info" class="h-8 w-8 text-slate-400 mx-auto mb-3"></i-feather>
+                <p class="text-slate-500">No baseline assessment data found.</p>
+                <p class="text-xs text-slate-400 mt-1">Please complete the final step of the onboarding process.</p>
+              </div>
+            </ng-template>
+          </app-card-content>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>
+

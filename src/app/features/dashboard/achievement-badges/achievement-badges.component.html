@@ -1,0 +1,37 @@
+<app-card>
+  <app-card-header>
+    <app-card-title>Your Badges</app-card-title>
+  </app-card-header>
+  <app-card-content>
+    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+      <!-- Loop through each badge from the component's badges array -->
+      <div
+        *ngFor="let badge of badges"
+        class="flex flex-col items-center justify-center p-3 rounded-lg"
+        [ngClass]="{
+          'bg-blue-50 text-blue-700': badge.unlocked,
+          'bg-gray-100 text-gray-400 opacity-60': !badge.unlocked
+        }"
+      >
+        <div
+          class="p-2 rounded-full"
+          [ngClass]="badge.unlocked ? 'bg-blue-100' : 'bg-gray-200'"
+        >
+          <!-- Use ngSwitch to select the correct icon based on the badge.icon string -->
+          <div [ngSwitch]="badge.icon">
+            <i-feather *ngSwitchCase="'PenTool'" name="pen-tool" class="h-6 w-6"></i-feather>
+            <i-feather *ngSwitchCase="'BookOpen'" name="book-open" class="h-6 w-6"></i-feather>
+            <i-feather *ngSwitchCase="'Mic'" name="mic" class="h-6 w-6"></i-feather>
+            <i-feather *ngSwitchCase="'Globe'" name="globe" class="h-6 w-6"></i-feather>
+            <i-feather *ngSwitchCase="'Users'" name="users" class="h-6 w-6"></i-feather>
+            <!-- Default icon if no match is found -->
+            <i-feather *ngSwitchDefault name="award" class="h-6 w-6"></i-feather>
+          </div>
+        </div>
+        <span class="mt-2 text-xs font-medium text-center">
+          {{ badge.name }}
+        </span>
+      </div>
+    </div>
+  </app-card-content>
+</app-card>

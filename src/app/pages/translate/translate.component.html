@@ -1,0 +1,297 @@
+<div class="max-w-4xl mx-auto p-6 space-y-6">
+  <!-- Header Section -->
+  <div class="text-center">
+    <h2 class="text-3xl font-bold text-gray-900 mb-2">Learn from your native language</h2>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+      Speak what's in your brain in your native language and get to know how it is used in English.
+    </p>
+  </div>
+
+  <!-- Language Selection Card -->
+  
+    
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Select Your Native Language</h3>
+        <i-feather name="globe" class="h-5 w-5 text-blue-500"></i-feather>
+      </div>
+      
+      <!-- Language Dropdown -->
+      <div class="relative dropdown-container">
+        <button
+          (click)="toggleLanguageDropdown()"
+          [disabled]="!isIdle"
+          class="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white text-left hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300"
+          [class.border-blue-500]="hasLanguageSelected"
+          [class.text-gray-500]="!hasLanguageSelected"
+        >
+          <span class="flex items-center">
+            <i-feather name="mic" class="h-4 w-4 mr-2" 
+                       [class.text-gray-400]="!hasLanguageSelected"
+                       [class.text-blue-500]="hasLanguageSelected"></i-feather>
+            <span [class.text-gray-500]="!hasLanguageSelected">{{ selectedLanguageName }}</span>
+          </span>
+          <i-feather name="chevron-down" class="h-4 w-4 text-gray-500 transition-transform duration-200" 
+                     [class.rotate-180]="showLanguageDropdown"></i-feather>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div *ngIf="showLanguageDropdown" 
+             class="absolute z-50 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-2xl max-h-64 overflow-y-auto">
+          <div class="p-2">
+            <div *ngFor="let language of supportedLanguages; trackBy: trackByLanguageCode" 
+                 (click)="selectLanguage(language.code)"
+                 class="w-full px-4 py-3 mb-1 last:mb-0 cursor-pointer transition-all duration-200 rounded-md hover:bg-blue-50"
+                 [class.bg-blue-50]="selectedLanguage === language.code"
+                 [class.text-blue-700]="selectedLanguage === language.code"
+                 [class.border-l-4]="selectedLanguage === language.code"
+                 [class.border-l-blue-500]="selectedLanguage === language.code"
+                 [class.pl-3]="selectedLanguage === language.code">
+              <div class="flex items-center justify-between">
+                <div class="font-medium">{{ language.displayName }}</div>
+                <i-feather 
+                  *ngIf="selectedLanguage === language.code" 
+                  name="check" 
+                  class="h-4 w-4 text-blue-500">
+                </i-feather>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+
+  <!-- Recording Interface Card -->
+  <div>
+    <app-card class="mt-4">
+      <app-card-content class="p-8 text-center">
+        <!-- Status Display -->
+        <div class="mb-6">
+          <p class="text-sm font-medium mb-2" [ngClass]="getRecordingStatusClass()">
+            {{ getRecordingStatusText() }}
+          </p>
+          
+          <!-- Audio Visualization (shown during recording) -->
+          <div *ngIf="isRecording" class="flex justify-center items-end gap-1 h-5 mt-3">
+            <div class="w-1 bg-blue-500 rounded-full animate-pulse" 
+                 style="height: 8px; animation-delay: 0s; animation-duration: 1.5s;"></div>
+            <div class="w-1 bg-blue-500 rounded-full animate-pulse" 
+                 style="height: 16px; animation-delay: 0.1s; animation-duration: 1.5s;"></div>
+            <div class="w-1 bg-blue-500 rounded-full animate-pulse" 
+                 style="height: 12px; animation-delay: 0.2s; animation-duration: 1.5s;"></div>
+            <div class="w-1 bg-blue-500 rounded-full animate-pulse" 
+                 style="height: 20px; animation-delay: 0.3s; animation-duration: 1.5s;"></div>
+            <div class="w-1 bg-blue-500 rounded-full animate-pulse" 
+                 style="height: 10px; animation-delay: 0.4s; animation-duration: 1.5s;"></div>
+          </div>
+        </div>
+
+        <!-- Recording Controls -->
+        <div class="flex justify-center items-center space-x-6 mb-6">
+          <!-- Start Recording Button -->
+          <button
+            *ngIf="isIdle"
+            (click)="startRecording()"
+            [disabled]="!hasLanguageSelected"
+            class="w-20 h-20 rounded-full transition-all duration-200 flex items-center justify-center focus:outline-none shadow-lg hover:shadow-xl"
+            [class.bg-blue-100]="hasLanguageSelected"
+            [class.text-blue-600]="hasLanguageSelected"
+            [class.hover:bg-blue-200]="hasLanguageSelected"
+            [class.hover:scale-105]="hasLanguageSelected"
+            [class.focus:ring-4]="hasLanguageSelected"
+            [class.focus:ring-blue-300]="hasLanguageSelected"
+            [class.bg-gray-100]="!hasLanguageSelected"
+            [class.text-gray-400]="!hasLanguageSelected"
+            [class.cursor-not-allowed]="!hasLanguageSelected"
+          >
+            <i-feather name="mic" class="h-10 w-10"></i-feather>
+          </button>
+
+          <!-- Recording Active Button -->
+          <button
+            *ngIf="isRecording"
+            (click)="stopRecording()"
+            class="w-20 h-20 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition-all duration-200 flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-red-300 animate-pulse shadow-lg shadow-red-200"
+          >
+            <i-feather name="square" class="h-10 w-10"></i-feather>
+          </button>
+
+          <!-- Processing Indicator -->
+          <div
+            *ngIf="isProcessing"
+            class="w-20 h-20 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center shadow-lg shadow-yellow-200"
+          >
+            <i-feather name="loader" class="h-10 w-10 animate-spin"></i-feather>
+          </div>
+
+          <!-- Speaking Indicator -->
+          <div
+            *ngIf="isSpeaking"
+            class="w-20 h-20 rounded-full bg-green-100 text-green-600 flex items-center justify-center animate-pulse shadow-lg shadow-green-200"
+          >
+            <i-feather name="volume-2" class="h-10 w-10"></i-feather>
+          </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="text-sm text-gray-500 max-w-md mx-auto">
+          <p *ngIf="isIdle && !translationResult && !hasLanguageSelected" class="animate-fade-in text-orange-600 font-medium">
+            Please select your native language from the dropdown above
+          </p>
+          <p *ngIf="isIdle && !translationResult && hasLanguageSelected" class="animate-fade-in">
+            Click the microphone to start speaking in {{ selectedLanguageName.split('(')[0].trim() }}
+          </p>
+          <p *ngIf="isRecording" class="text-red-600 font-medium animate-bounce">
+            Speak clearly in your native language. Click stop when finished.
+          </p>
+          <p *ngIf="isProcessing" class="text-yellow-600 font-medium">
+            Converting your speech to English...
+          </p>
+          <p *ngIf="isSpeaking" class="text-green-600 font-medium">
+            Listen to the English translation
+          </p>
+        </div>
+      </app-card-content>
+    </app-card>
+  </div>
+
+  <!-- Translation + Tips Sections stay unchanged -->
+  <!-- (keeping your original code here) -->
+   <div>
+    <!-- Translation Results -->
+    <div *ngIf="translationResult" class="space-y-4 animate-fadeInUp">
+      <!-- Original Text -->
+      <app-card class="transform transition-all duration-300 hover:scale-102">
+        <app-card-content class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+              <i-feather name="message-circle" class="h-5 w-5 mr-2 text-blue-500"></i-feather>
+              What you said:
+            </h3>
+            <span class="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">
+              {{ translationResult.originalLanguage }}
+            </span>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500">
+            <p class="text-gray-700 text-lg leading-relaxed italic">
+              "{{ translationResult.originalText }}"
+            </p>
+          </div>
+        </app-card-content>
+      </app-card>
+
+      <!-- English Translation -->
+      <app-card class="transform transition-all duration-300 hover:scale-102">
+        <app-card-content class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+              <i-feather name="globe" class="h-5 w-5 mr-2 text-green-500"></i-feather>
+              English Translation:
+            </h3>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">
+                English
+              </span>
+              <!-- Repeat Audio Button -->
+              <button
+                (click)="repeatTranslation()"
+                [disabled]="isSpeaking"
+                class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-110 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100"
+                title="Play translation again"
+              >
+                <i-feather name="volume-2" class="h-4 w-4"></i-feather>
+              </button>
+            </div>
+          </div>
+          <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+            <p class="text-gray-700 text-lg leading-relaxed font-medium">
+              "{{ translationResult.translatedText }}"
+            </p>
+          </div>
+        </app-card-content>
+      </app-card>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+        <app-button 
+          variant="outline" 
+          (click)="clearResults()"
+          class="flex items-center justify-center space-x-2 hover:scale-105 transition-transform duration-200"
+        >
+          <i-feather name="refresh-cw" class="h-4 w-4"></i-feather>
+          <span>Try Again</span>
+        </app-button>
+        
+        <app-button 
+          variant="primary" 
+          (click)="startRecording()"
+          [disabled]="!isIdle || !hasLanguageSelected"
+          class="flex items-center justify-center space-x-2 hover:scale-105 transition-transform duration-200 disabled:hover:scale-100"
+        >
+          <i-feather name="mic" class="h-4 w-4"></i-feather>
+          <span>Record Another</span>
+        </app-button>
+      </div>
+    </div>
+
+    <!-- Error Display -->
+    <div *ngIf="hasError" class="mt-6 animate-shake">
+      <app-card class="border-red-200 bg-red-50">
+        <app-card-content class="p-6">
+          <div class="flex items-center space-x-3 text-red-600">
+            <i-feather name="alert-circle" class="h-5 w-5 flex-shrink-0 animate-pulse"></i-feather>
+            <p class="text-sm font-medium">{{ errorMessage }}</p>
+          </div>
+        </app-card-content>
+      </app-card>
+    </div>
+
+</div>
+
+<!-- Custom Tailwind animations -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-in;
+}
+
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+.hover\:scale-110:hover {
+  transform: scale(1.1);
+}
+</style>

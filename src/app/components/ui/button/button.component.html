@@ -1,0 +1,21 @@
+<a 
+  *ngIf="routerLink; else standardButton"
+  [routerLink]="routerLink"
+  [ngClass]="getButtonClasses()"
+  [class.opacity-50]="disabled"
+  [class.pointer-events-none]="disabled"
+  style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;"
+>
+  <ng-content></ng-content>
+</a>
+
+<!-- #standardButton template is rendered if routerLink is not provided -->
+<ng-template #standardButton>
+  <button 
+    type="button"
+    [ngClass]="getButtonClasses()"
+    [disabled]="disabled"
+  >
+    <ng-content></ng-content>
+  </button>
+</ng-template>
