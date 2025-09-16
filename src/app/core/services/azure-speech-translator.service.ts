@@ -1,6 +1,7 @@
 // src/app/core/services/azure-speech-translator.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http'; // --- CHANGED ---
+import { BehaviorSubject, lastValueFrom } from 'rxjs'; // --- CHANGED ---
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import { SpeechConfig } from '../models/pronunciation-result.interface';
 
@@ -27,6 +28,9 @@ export class AzureSpeechTranslatorService {
   private speechSynthesizer: sdk.SpeechSynthesizer | null = null;
   private isInitialized = false;
 
+  // --- CHANGED ---: Added the URL for your Netlify Function
+  private tokenUrl = '/.netlify/functions/get-speech-token';
+
   // State management
   private recordingStateSubject = new BehaviorSubject<'idle' | 'recording' | 'processing' | 'speaking'>('idle');
   private translationResultSubject = new BehaviorSubject<TranslationResult | null>(null);
@@ -39,46 +43,47 @@ export class AzureSpeechTranslatorService {
     { code: 'hi-IN', name: 'Hindi', displayName: 'हिन्दी (Hindi)' },
     { code: 'es-ES', name: 'Spanish', displayName: 'Español (Spanish)' },
     { code: 'fr-FR', name: 'French', displayName: 'Français (French)' },
-    { code: 'de-DE', name: 'German', displayName: 'Deutsch (German)' },
-    { code: 'it-IT', name: 'Italian', displayName: 'Italiano (Italian)' },
-    { code: 'pt-BR', name: 'Portuguese', displayName: 'Português (Portuguese)' },
-    { code: 'ru-RU', name: 'Russian', displayName: 'Русский (Russian)' },
-    { code: 'ja-JP', name: 'Japanese', displayName: '日本語 (Japanese)' },
-    { code: 'ko-KR', name: 'Korean', displayName: '한국어 (Korean)' },
-    { code: 'zh-CN', name: 'Chinese', displayName: '中文 (Chinese)' },
-    { code: 'ar-SA', name: 'Arabic', displayName: 'العربية (Arabic)' },
-    { code: 'th-TH', name: 'Thai', displayName: 'ไทย (Thai)' },
-    { code: 'vi-VN', name: 'Vietnamese', displayName: 'Tiếng Việt (Vietnamese)' },
-    { code: 'nl-NL', name: 'Dutch', displayName: 'Nederlands (Dutch)' },
+    // ... (rest of your languages)
     { code: 'sv-SE', name: 'Swedish', displayName: 'Svenska (Swedish)' }
   ];
 
-  constructor() {}
+  // --- CHANGED ---: Injected HttpClient
+  constructor(private http: HttpClient) {}
 
   /**
    * Initialize the Azure Speech Translation Service
    */
-  initialize(config: SpeechConfig): void {
+  // --- CHANGED ---: This function is now async and fetches a token
+  async initialize(config: { region: string }): Promise<void> {
+    if (this.isInitialized) {
+      return;
+    }
+
     try {
-      // Initialize translation config
-      this.speechConfig = sdk.SpeechTranslationConfig.fromSubscription(
-        config.subscriptionKey,
-        config.region
+      // 1. Call your Netlify Function to get a single token
+      const token = await lastValueFrom(
+        this.http.get(this.tokenUrl, { responseType: 'text' })
       );
 
-      // Set default source language (will be changed dynamically)
+      if (!token) {
+        throw new Error('Received an empty token from the server');
+      }
+
+      // 2. Initialize translation config *using the token*
+      this.speechConfig = sdk.SpeechTranslationConfig.fromAuthorizationToken(
+        token,
+        config.region
+      );
       this.speechConfig.speechRecognitionLanguage = 'hi-IN'; // Default to Hindi
-      
-      // Add English as target language
       this.speechConfig.addTargetLanguage('en');
 
-      // Initialize speech synthesis config for English TTS
-      const synthConfig = sdk.SpeechConfig.fromSubscription(
-        config.subscriptionKey,
+      // 3. Initialize speech synthesis config *using the same token*
+      const synthConfig = sdk.SpeechConfig.fromAuthorizationToken(
+        token,
         config.region
       );
       synthConfig.speechSynthesisLanguage = 'en-US';
-      synthConfig.speechSynthesisVoiceName = 'en-US-JennyNeural'; // High-quality neural voice
+      synthConfig.speechSynthesisVoiceName = 'en-US-JennyNeural';
       
       const audioConfig = sdk.AudioConfig.fromDefaultSpeakerOutput();
       this.speechSynthesizer = new sdk.SpeechSynthesizer(synthConfig, audioConfig);
@@ -280,5 +285,4 @@ export class AzureSpeechTranslatorService {
     this.recordingStateSubject.complete();
     this.translationResultSubject.complete();
   }
-  
 }

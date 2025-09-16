@@ -21,7 +21,7 @@ import { ProgressStatsComponent } from './features/dashboard/progess-stats/proge
 import { SettingsComponent } from './pages/settings/settings.component';
 import { UserProfilePageComponent } from './pages/userprofile/userprofile.component';
 import { LanguageTranslatorComponent } from './pages/translate/translate.component';
-import {ChatPracticeComponent} from './pages/chat-practice/chat-practice.component';
+//import {ChatPracticeComponent} from './pages/chat-practice/chat-practice.component';
 
 export const routes: Routes = [
   // Public routes that don't use the main layout
@@ -52,7 +52,7 @@ export const routes: Routes = [
       { path: 'settings', component : SettingsComponent},
       { path: 'userprofile', component: UserProfilePageComponent },
       { path: 'translate', component: LanguageTranslatorComponent },
-      { path: 'chat' , component: ChatPracticeComponent }
+     // { path: 'chat' , component: ChatPracticeComponent }
     ]
   },
   

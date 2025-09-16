@@ -31,7 +31,7 @@ export class SidebarComponent {
     { name: 'Lessons', icon: 'book-open', path: '/lessons' },
     { name: 'Translate', icon: 'shuffle', path: '/translate' },
     { name: 'Fluent Frontier', icon: 'globe', path: '/fluent-frontier' },
-    { name: 'Chat Practice', icon: 'message-circle', path: '/chat' },
+   // { name: 'Chat Practice', icon: 'message-circle', path: '/chat' },
     { name: 'Progress', icon: 'bar-chart', path: '/progressbar' },
     { name: 'Settings', icon: 'settings', path: '/settings' },
   ];

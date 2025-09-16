@@ -1,0 +1,23 @@
+# This is the main configuration file for Netlify
+
+[build]
+  # This is the command Netlify will run to build your app.
+  # It's the same as what you saw in the log.
+  command = "npm run build"
+  
+  # This tells Netlify where your built Angular app is.
+  # This path comes directly from your build log.
+  publish = "dist/wom-frontend/browser"
+  
+  # This tells Netlify where to find your backend functions
+  # (like get-speech-token.js).
+  functions = "netlify/functions"
+
+# This part is CRITICAL for Angular (or any Single Page App)
+[[redirects]]
+  # This "catches" all page requests...
+  from = "/*"
+  # ...and sends them to your index.html file.
+  to = "/index.html"
+  # This allows Angular's router to handle all your pages.
+  status = 200

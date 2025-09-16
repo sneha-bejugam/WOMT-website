@@ -1,20 +1,25 @@
 // src/app/core/services/azure-speech.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http'; // --- CHANGED ---
+import { Observable, Subject, BehaviorSubject, lastValueFrom } from 'rxjs'; // --- CHANGED ---
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import { 
   PronunciationResult, 
+  // --- CHANGED ---: Your config no longer needs the subscriptionKey
   SpeechConfig, 
   WordScore
-} from '../models/pronunciation-result.interface';
+} from '../models/pronunciation-result.interface'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AzureSpeechService {
-  private speechConfig: sdk.SpeechConfig | null = null; // Fix: Initialize as null
+  private speechConfig: sdk.SpeechConfig | null = null;
   private recognizer: sdk.SpeechRecognizer | null = null;
   private isInitialized = false;
+
+  // --- CHANGED ---: Added the URL for your Netlify Function
+  private tokenUrl = '/.netlify/functions/get-speech-token';
 
   // Observables for real-time feedback
   private recordingStateSubject = new BehaviorSubject<'idle' | 'recording' | 'processing'>('idle');
@@ -23,19 +28,37 @@ export class AzureSpeechService {
   public recordingState$ = this.recordingStateSubject.asObservable();
   public audioLevel$ = this.audioLevelSubject.asObservable();
 
-  constructor() {}
+  // --- CHANGED ---: Injected HttpClient to call your backend
+  constructor(private http: HttpClient) {}
 
   /**
-   * Initialize the Azure Speech Service with credentials
+   * Initialize the Azure Speech Service by fetching a temporary token
    */
-  initialize(config: SpeechConfig): void {
+  // --- CHANGED ---: This function is now async and fetches its own token
+  async initialize(config: { region: string; language?: string }): Promise<void> {
+    if (this.isInitialized) {
+      return;
+    }
+
     try {
-      this.speechConfig = sdk.SpeechConfig.fromSubscription(
-        config.subscriptionKey,
+      // 1. Call your Netlify Function to get a token
+      const token = await lastValueFrom(
+        this.http.get(this.tokenUrl, { responseType: 'text' })
+      );
+
+      if (!token) {
+        throw new Error('Received an empty token from the server');
+      }
+
+      // 2. Initialize the SDK using the *token*, not the secret key
+      this.speechConfig = sdk.SpeechConfig.fromAuthorizationToken(
+        token,
         config.region
       );
       this.speechConfig.speechRecognitionLanguage = config.language || 'en-US';
       this.isInitialized = true;
+      console.log('Azure Speech Service initialized successfully.');
+
     } catch (error) {
       console.error('Failed to initialize Azure Speech Service:', error);
       throw new Error('Azure Speech Service initialization failed');
@@ -164,19 +187,18 @@ export class AzureSpeechService {
   /**
    * Stop current recording/recognition
    */
+  // --- CHANGED ---: Simplified this method to just "close" the recognizer.
+  // 'recognizeOnceAsync' can't be stopped, but we can clean up the recognizer
+  // to prevent it from holding onto resources.
   stopRecording(): void {
     if (this.recognizer) {
-      this.recognizer.stopContinuousRecognitionAsync(
-        () => {
-          this.recognizer?.close();
-          this.recognizer = null;
-          this.recordingStateSubject.next('idle');
-        },
-        (error) => {
-          console.error('Error stopping recognition:', error);
-          this.recordingStateSubject.next('idle');
-        }
-      );
+      try {
+        this.recognizer.close();
+        this.recognizer = null;
+      } catch (error) {
+        console.error('Error closing recognizer:', error);
+      }
+      this.recordingStateSubject.next('idle');
     }
   }
 
@@ -188,10 +210,8 @@ export class AzureSpeechService {
     
     try {
       const pronunciationResult = sdk.PronunciationAssessmentResult.fromResult(result);
-      // Fix: Use 'Words' instead of 'words' (capital W)
       const words = pronunciationResult.detailResult?.Words || [];
       
-      // Fix: Add proper typing for word parameter
       words.forEach((word: any) => {
         let errorType: 'none' | 'omission' | 'insertion' | 'mispronunciation' = 'none';
         
@@ -227,6 +247,7 @@ export class AzureSpeechService {
 
   /**
    * Generate improvement suggestions based on assessment results
+   * (This logic is unchanged)
    */
   private generateSuggestions(
     result: sdk.PronunciationAssessmentResult,
