@@ -334,8 +334,7 @@ export class FluentFrontierPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Initialize Azure Speech Service
     try {
-      this.azureSpeechService.initialize({
-        subscriptionKey: environment.azureSpeech.subscriptionKey,
+       this.azureSpeechService.initialize({
         region: environment.azureSpeech.region,
         language: environment.azureSpeech.language
       });

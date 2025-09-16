@@ -54,13 +54,11 @@ export class LanguageTranslatorComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     try {
       // Initialize the translation service
       this.translatorService.initialize({
-        subscriptionKey: environment.azureSpeech.subscriptionKey,
-        region: environment.azureSpeech.region,
-        language: 'en-US'
+       region: environment.azureSpeech.region
       });
 
       // Get supported languages
