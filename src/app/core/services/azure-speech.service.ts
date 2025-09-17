@@ -74,167 +74,133 @@ export class AzureSpeechService {
   /**
    * Start pronunciation assessment
    */
-  /**
- * Start pronunciation assessment with continuous recording
- */
-async startPronunciationAssessment(
-  referenceText: string,
-  keywords: string[] = []
-): Promise<PronunciationResult> {
-  if (!this.isInitialized || !this.speechConfig) {
-    throw new Error('Azure Speech Service not initialized');
-  }
+  async startPronunciationAssessment(
+    referenceText: string,
+    keywords: string[] = []
+  ): Promise<PronunciationResult> {
+    if (!this.isInitialized || !this.speechConfig) {
+      throw new Error('Azure Speech Service not initialized');
+    }
 
-  return new Promise((resolve, reject) => {
-    try {
-      this.recordingStateSubject.next('recording');
+    return new Promise((resolve, reject) => {
+      try {
+        this.recordingStateSubject.next('recording');
 
-      // Configure audio input
-      const audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
-      
-      // Configure pronunciation assessment
-      const pronunciationConfig = new sdk.PronunciationAssessmentConfig(
-        referenceText,
-        sdk.PronunciationAssessmentGradingSystem.HundredMark,
-        sdk.PronunciationAssessmentGranularity.Phoneme,
-        true // Enable miscue assessment
-      );
-
-      // Create speech recognizer
-      this.recognizer = new sdk.SpeechRecognizer(this.speechConfig!, audioConfig);
-      
-      // Apply pronunciation assessment configuration
-      pronunciationConfig.applyTo(this.recognizer);
-
-      // Store the resolve/reject functions for manual stop
-      (this.recognizer as any)._resolveFunction = resolve;
-      (this.recognizer as any)._rejectFunction = reject;
-
-      // Handle intermediate results (real-time feedback)
-      this.recognizer.recognizing = (s, e) => {
-        console.log('Recognizing:', e.result.text);
-      };
-
-      // Handle final results - but don't auto-resolve, wait for manual stop
-      this.recognizer.recognized = (s, e) => {
-        if (e.result.reason === sdk.ResultReason.RecognizedSpeech && e.result.text.trim()) {
-          console.log('Recognized text:', e.result.text);
-          // Store the latest result but don't resolve yet
-          (this.recognizer as any)._latestResult = e.result;
-        }
-      };
-
-      // Handle errors
-      this.recognizer.canceled = (s, e) => {
-        this.recordingStateSubject.next('idle');
+        // Configure audio input
+        const audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
         
-        if (e.reason === sdk.CancellationReason.Error) {
-          reject(new Error(`Recognition failed: ${e.errorDetails}`));
-        } else {
-          // If cancelled by user (manual stop), process the latest result
-          this.processLatestResult(resolve, reject, referenceText, keywords);
-        }
-      };
+        // Configure pronunciation assessment
+        const pronunciationConfig = new sdk.PronunciationAssessmentConfig(
+          referenceText,
+          sdk.PronunciationAssessmentGradingSystem.HundredMark,
+          sdk.PronunciationAssessmentGranularity.Phoneme,
+          true // Enable miscue assessment
+        );
 
-      // Handle session events
-      this.recognizer.sessionStarted = (s, e) => {
-        console.log('Recognition session started - speak now, click stop when finished');
-      };
+        // Create speech recognizer
+        this.recognizer = new sdk.SpeechRecognizer(this.speechConfig!, audioConfig);
+        
+        // Apply pronunciation assessment configuration
+        pronunciationConfig.applyTo(this.recognizer);
 
-      this.recognizer.sessionStopped = (s, e) => {
-        console.log('Recognition session stopped');
-        // Process the latest result when session stops
-        this.processLatestResult(resolve, reject, referenceText, keywords);
-      };
+        // Handle intermediate results (real-time feedback)
+        this.recognizer.recognizing = (s, e) => {
+          // You can provide real-time feedback here if needed
+          console.log('Recognizing:', e.result.text);
+        };
 
-      // Start continuous recognition (not recognizeOnceAsync)
-      this.recognizer.startContinuousRecognitionAsync(
-        () => {
-          console.log('Continuous recognition started');
-        },
-        (error) => {
+        // Handle final results
+        this.recognizer.recognized = (s, e) => {
+          this.recordingStateSubject.next('processing');
+          
+          if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
+            try {
+              const pronunciationResult = sdk.PronunciationAssessmentResult.fromResult(e.result);
+              
+              const result: PronunciationResult = {
+                accuracy: Math.round(pronunciationResult.accuracyScore || 0),
+                fluency: Math.round(pronunciationResult.fluencyScore || 0),
+                completeness: Math.round(pronunciationResult.completenessScore || 0),
+                pronunciation: Math.round(pronunciationResult.pronunciationScore || 0),
+                overallScore: Math.round(
+                  ((pronunciationResult.accuracyScore || 0) + 
+                   (pronunciationResult.fluencyScore || 0) + 
+                   (pronunciationResult.pronunciationScore || 0)) / 3
+                ),
+                wordScores: this.extractWordScores(e.result),
+                suggestions: this.generateSuggestions(pronunciationResult, keywords, e.result.text),
+                recognizedText: e.result.text
+              };
+
+              this.recordingStateSubject.next('idle');
+              resolve(result);
+            } catch (error) {
+              this.recordingStateSubject.next('idle');
+              reject(new Error('Failed to process pronunciation assessment results'));
+            }
+          } else {
+            this.recordingStateSubject.next('idle');
+            reject(new Error('Speech not recognized clearly. Please try again.'));
+          }
+        };
+
+        // Handle errors
+        this.recognizer.canceled = (s, e) => {
           this.recordingStateSubject.next('idle');
-          reject(new Error(`Recognition failed: ${error}`));
-        }
-      );
+          
+          if (e.reason === sdk.CancellationReason.Error) {
+            reject(new Error(`Recognition failed: ${e.errorDetails}`));
+          } else {
+            reject(new Error('Recognition was canceled'));
+          }
+        };
 
-    } catch (error) {
-      this.recordingStateSubject.next('idle');
-      reject(error);
-    }
-  });
-}
+        // Handle session events
+        this.recognizer.sessionStarted = (s, e) => {
+          console.log('Recognition session started');
+        };
 
-/**
- * Process the latest recognition result
- */
-private processLatestResult(
-  resolve: (value: PronunciationResult) => void, 
-  reject: (reason?: any) => void,
-  referenceText: string,
-  keywords: string[]
-): void {
-  try {
-    const latestResult = (this.recognizer as any)?._latestResult;
-    
-    if (latestResult && latestResult.text.trim()) {
-      this.recordingStateSubject.next('processing');
-      
-      const pronunciationResult = sdk.PronunciationAssessmentResult.fromResult(latestResult);
-      
-      const result: PronunciationResult = {
-        accuracy: Math.round(pronunciationResult.accuracyScore || 0),
-        fluency: Math.round(pronunciationResult.fluencyScore || 0),
-        completeness: Math.round(pronunciationResult.completenessScore || 0),
-        pronunciation: Math.round(pronunciationResult.pronunciationScore || 0),
-        overallScore: Math.round(
-          ((pronunciationResult.accuracyScore || 0) + 
-           (pronunciationResult.fluencyScore || 0) + 
-           (pronunciationResult.pronunciationScore || 0)) / 3
-        ),
-        wordScores: this.extractWordScores(latestResult),
-        suggestions: this.generateSuggestions(pronunciationResult, keywords, latestResult.text),
-        recognizedText: latestResult.text
-      };
+        this.recognizer.sessionStopped = (s, e) => {
+          console.log('Recognition session stopped');
+          this.recordingStateSubject.next('idle');
+        };
 
-      this.recordingStateSubject.next('idle');
-      resolve(result);
-    } else {
-      this.recordingStateSubject.next('idle');
-      reject(new Error('No speech was recognized. Please try again.'));
-    }
-  } catch (error) {
-    this.recordingStateSubject.next('idle');
-    reject(new Error('Failed to process pronunciation assessment results'));
-  }
-}
+        // Start recognition
+        this.recognizer.recognizeOnceAsync(
+          (result) => {
+            // This callback is also called, but we handle results in the 'recognized' event
+          },
+          (error) => {
+            this.recordingStateSubject.next('idle');
+            reject(new Error(`Recognition failed: ${error}`));
+          }
+        );
 
-/**
- * Stop current recording/recognition and process results
- */
-stopRecording(): void {
-  if (this.recognizer) {
-    this.recordingStateSubject.next('processing');
-    
-    // Stop continuous recognition
-    this.recognizer.stopContinuousRecognitionAsync(
-      () => {
-        console.log('Recording stopped by user');
-        // The sessionStopped event will handle result processing
-      },
-      (error) => {
-        console.error('Error stopping recognition:', error);
+      } catch (error) {
         this.recordingStateSubject.next('idle');
-        
-        // Try to reject the promise if it exists
-        const rejectFn = (this.recognizer as any)?._rejectFunction;
-        if (rejectFn) {
-          rejectFn(new Error('Failed to stop recording properly'));
-        }
+        reject(error);
       }
-    );
+    });
   }
-}
+
+  /**
+   * Stop current recording/recognition
+   */
+  // --- CHANGED ---: Simplified this method to just "close" the recognizer.
+  // 'recognizeOnceAsync' can't be stopped, but we can clean up the recognizer
+  // to prevent it from holding onto resources.
+  stopRecording(): void {
+    if (this.recognizer) {
+      try {
+        this.recognizer.close();
+        this.recognizer = null;
+      } catch (error) {
+        console.error('Error closing recognizer:', error);
+      }
+      this.recordingStateSubject.next('idle');
+    }
+  }
+
   /**
    * Extract word-level scores from recognition result
    */
