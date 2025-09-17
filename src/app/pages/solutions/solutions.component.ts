@@ -36,29 +36,29 @@ export class SolutionsPageComponent {
 
   constructor(private router: Router) {}
 
- studentStories = [
-    {
-      name: 'Priya Patel',
-      university: 'Marketing Professional',
-      country: 'India',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      testimonial: '"The smart pronunciation coach helped me communicate more clearly in meetings, while the business terminology lessons made it easier. I have gained confidence in presentations and networking events.'
-    },
-    {
-      name: 'Amina Ngoy',
-      university: 'International Development Specialist',
-      country: 'Democratic Republic of the Congo',
-      avatar: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      testimonial: '"The advanced speech training improved my clarity, while the business English modules transformed my communication. Interactive networking simulations prepared me well for professional conversations."'
-    },
-    {
-      name: 'Chinedu Okafor',
-      university: 'Senior Project Manager',
-      country: 'Nigeria',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      testimonial: '"The intelligent feedback system helped reduce misunderstandings in meetings, while the business writing modules polished my communication. I now lead conferences and office meetings with confidence."'
-    }
-  ];
+//  studentStories = [
+//     {
+//       name: 'Priya Patel',
+//       university: 'Marketing Professional',
+//       country: 'India',
+//       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//       testimonial: '"The smart pronunciation coach helped me communicate more clearly in meetings, while the business terminology lessons made it easier. I have gained confidence in presentations and networking events.'
+//     },
+//     {
+//       name: 'Amina Ngoy',
+//       university: 'International Development Specialist',
+//       country: 'Democratic Republic of the Congo',
+//       avatar: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//       testimonial: '"The advanced speech training improved my clarity, while the business English modules transformed my communication. Interactive networking simulations prepared me well for professional conversations."'
+//     },
+//     {
+//       name: 'Chinedu Okafor',
+//       university: 'Senior Project Manager',
+//       country: 'Nigeria',
+//       avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//       testimonial: '"The intelligent feedback system helped reduce misunderstandings in meetings, while the business writing modules polished my communication. I now lead conferences and office meetings with confidence."'
+//     }
+//   ];
   
   goToSignupPage(): void {
     // You could add other logic here before navigating

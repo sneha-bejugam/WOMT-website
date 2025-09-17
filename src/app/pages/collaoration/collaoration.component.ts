@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
 import { FeatherModule } from 'angular-feather';
 
@@ -42,6 +42,7 @@ export class CollaborationPageComponent {
     phone: '',
     objectives: ''
   };
+  router: any;
 
   // Method to open the contact form modal
   openContactForm(): void {
@@ -63,6 +64,11 @@ export class CollaborationPageComponent {
         this.closeContactForm();
         this.resetForm();
     }, 3000);
+  }
+
+  goToSignup(): void{
+    console.log('Navigating to signup page...');
+    this.router.navigate(['/signup']);
   }
 
   // Helper method to reset the form data
