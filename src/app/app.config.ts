@@ -10,7 +10,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 // Feather Icons Imports (NgModule-based)
 import { FeatherModule } from 'angular-feather';
-import { User, Mail, Lock, ChevronRight, ArrowRight, Menu, Bell, ChevronDown, Camera, Heart, Github, Zap, Paperclip, Target, Briefcase, Award, CheckCircle, Users, UserPlus, BookOpen, Globe, Framer, Monitor, MessageSquare, Check, Star, Mic, StopCircle, Clock, BarChart, Play, Tool, LogOut, Home, MessageCircle, TrendingUp, Settings, PenTool, Book, Filter, Coffee, Volume2, Airplay, Search, Archive, BarChart2, RefreshCcw, MapPin, Slack, Tv, Shuffle } from 'angular-feather/icons';
+import { User, Mail, Lock, ChevronRight, ArrowRight, Menu, Bell, ChevronDown, Camera, Heart, Github, Zap, Paperclip, Target, Briefcase, Award, CheckCircle, Users, UserPlus, BookOpen, Globe, Framer, Monitor, MessageSquare, Check, Star, Mic, StopCircle, Clock, BarChart, Play, Tool, LogOut, Home, MessageCircle, TrendingUp, Settings, PenTool, Book, Filter, Coffee, Volume2, Airplay, Search, Archive, BarChart2, RefreshCcw, MapPin, Slack, Tv, Shuffle, RefreshCw } from 'angular-feather/icons';
 
 /**
  * Your web app's Firebase configuration.
@@ -79,7 +79,8 @@ const icons = {
   MapPin,
   Slack,
   Tv,
-  Shuffle
+  Shuffle,
+  RefreshCw
 };
 
 /**
