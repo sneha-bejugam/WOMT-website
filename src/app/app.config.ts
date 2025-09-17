@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideHttpClient } from '@angular/common/http';
 
 // Feather Icons Imports (NgModule-based)
 import { FeatherModule } from 'angular-feather';
@@ -89,6 +90,7 @@ export const appConfig: ApplicationConfig = {
     // --- Core Angular Providers ---
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    provideHttpClient(),
 
     // --- Modern Firebase Providers (placed directly in the array) ---
     provideFirebaseApp(() => initializeApp(firebaseConfig)),

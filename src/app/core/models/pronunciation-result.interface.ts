@@ -17,6 +17,7 @@ export interface WordScore {
   phonemeScores?: PhonemeScore[];
 }
 
+
 export interface PhonemeScore {
   phoneme: string;
   accuracy: number;

@@ -12,7 +12,8 @@ import { CardContentComponent } from '../../components/ui/card/card-content/card
 // Import Services and Models
 import { AzureSpeechService } from '../../core/services/azure-speech.service';
 import { PronunciationResult } from '../../core/models/pronunciation-result.interface';
-import { environment } from '../../../environments/environment';
+// import { environment } from '../../../environments/environment';
+import { provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-fluent-frontier-page',
@@ -23,7 +24,10 @@ import { environment } from '../../../environments/environment';
     FeatherModule,
     ButtonComponent,
     CardComponent,
-    CardContentComponent
+    CardContentComponent,
+    
+  ],
+  providers: [AzureSpeechService
   ],
   templateUrl: './fluent-frontier.component.html',
   styleUrls: ['./fluent-frontier.component.css']
@@ -174,24 +178,24 @@ export class FluentFrontierPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Initialize Azure Speech Service
-    try {
-       this.azureSpeechService.initialize({
-        region: environment.azureSpeech.region,
-        language: environment.azureSpeech.language
-      });
+    // try {
+    //    this.azureSpeechService.initialize({
+    //     region: environment.azureSpeech.region,
+    //     language: environment.azureSpeech.language
+    //   });
 
-      // Subscribe to recording state changes
-      this.subscriptions.add(
-        this.azureSpeechService.recordingState$.subscribe(state => {
-          this.recordingState = state;
-          this.updateGameState(state);
-        })
-      );
+    //   // Subscribe to recording state changes
+    //   this.subscriptions.add(
+    //     this.azureSpeechService.recordingState$.subscribe(state => {
+    //       this.recordingState = state;
+    //       this.updateGameState(state);
+    //     })
+    //   );
 
-    } catch (error) {
-      console.error('Failed to initialize speech service:', error);
-      alert('Failed to initialize speech recognition. Please check your configuration.');
-    }
+    // } catch (error) {
+    //   console.error('Failed to initialize speech service:', error);
+    //   alert('Failed to initialize speech recognition. Please check your configuration.');
+    // }
   }
 
   ngOnDestroy(): void {

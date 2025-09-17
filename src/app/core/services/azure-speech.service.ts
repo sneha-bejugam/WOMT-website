@@ -11,9 +11,7 @@ import {
   WordScore
 } from '../models/pronunciation-result.interface'; 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AzureSpeechService {
   private speechConfig: sdk.SpeechConfig | null = null;
   private recognizer: sdk.SpeechRecognizer | null = null;

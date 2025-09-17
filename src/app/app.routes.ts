@@ -41,6 +41,7 @@ export const routes: Routes = [
   {path : 'privacypolicy', component: PrivacyPolicyComponent},
   {path: 'termsofservices', component: TermsOfServiceComponent},
   {path: 'features',component:FeaturesComponent},
+//  { path: 'fluent-frontier', component: FluentFrontierPageComponent },
   
 
 
