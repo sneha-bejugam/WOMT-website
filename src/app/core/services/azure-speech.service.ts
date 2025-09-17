@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; // --- CHANGED ---
 import { Observable, Subject, BehaviorSubject, lastValueFrom } from 'rxjs'; // --- CHANGED ---
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
+
 import { 
   PronunciationResult, 
   // --- CHANGED ---: Your config no longer needs the subscriptionKey

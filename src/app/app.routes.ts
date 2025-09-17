@@ -58,5 +58,5 @@ export const routes: Routes = [
   
 
   // Wildcard route for a 404 page
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '/home' }
 ];
