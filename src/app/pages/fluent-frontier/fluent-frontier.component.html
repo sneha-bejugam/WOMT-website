@@ -86,26 +86,38 @@
         </div>
       </div>
 
-      <div class="flex flex-col items-center space-y-4">
-        <ng-container *ngIf="!recordingComplete && !isProcessing; else recordingControls">
+    <div class="flex flex-col items-center space-y-4">
+  <!-- Start Recording Button (only show when not recording and not processing) -->
+  <ng-container *ngIf="!isRecording && !isProcessing && !recordingComplete">
+    <button 
+      (click)="startRecording()" 
+      class="w-16 h-16 rounded-full flex items-center justify-center transition-colors bg-blue-100 text-blue-600 hover:bg-blue-200"
+    >
+      <i-feather name="mic" class="h-8 w-8"></i-feather>
+    </button>
+  </ng-container>
+
+  <!-- Recording Active - Show Stop Button -->
+        <ng-container *ngIf="isRecording">
           <button 
-            (click)="startRecording()" 
-            [disabled]="isRecording"
-            class="w-16 h-16 rounded-full flex items-center justify-center transition-colors" 
-            [ngClass]="isRecording ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-blue-100 text-blue-600 hover:bg-blue-200'"
+            (click)="stopRecording()" 
+            class="w-16 h-16 rounded-full flex items-center justify-center transition-colors bg-red-500 text-white hover:bg-red-600 animate-pulse shadow-lg"
           >
-            <i-feather name="mic" class="h-8 w-8"></i-feather>
+            <i-feather name="stop-circle" class="h-8 w-8"></i-feather>
           </button>
         </ng-container>
 
-        <ng-template #recordingControls>
-          <div *ngIf="isProcessing" class="flex flex-col items-center">
-            <div class="w-16 h-16 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
-              <i-feather name="loader" class="h-8 w-8 animate-spin"></i-feather>
-            </div>
-            <p class="text-sm text-yellow-600 mt-2">Analyzing pronunciation...</p>
+        <!-- Processing Indicator -->
+        <ng-container *ngIf="isProcessing">
+          <div class="w-16 h-16 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
+            <i-feather name="loader" class="h-8 w-8 animate-spin"></i-feather>
           </div>
-          <div *ngIf="recordingComplete && !isProcessing" class="flex space-x-4">
+          <p class="text-sm text-yellow-600 mt-2">Analyzing pronunciation...</p>
+        </ng-container>
+
+        <!-- Recording Complete Controls -->
+        <ng-container *ngIf="recordingComplete && !isProcessing">
+          <div class="flex space-x-4">
             <button (click)="playRecording()" class="w-12 h-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200">
               <i-feather name="play" class="h-6 w-6"></i-feather>
             </button>
@@ -113,16 +125,16 @@
               <i-feather name="mic" class="h-6 w-6"></i-feather>
             </button>
           </div>
-        </ng-template>
+        </ng-container>
 
+        <!-- Status Text -->
         <p class="text-sm text-gray-500 text-center">
-          <span *ngIf="isRecording">🔴 Recording... Speak clearly and include the key terms</span>
+          <span *ngIf="isRecording">🔴 Recording... Click STOP when finished</span>
           <span *ngIf="isProcessing">Processing your speech with Azure AI...</span>
           <span *ngIf="recordingComplete && !isProcessing">Recording complete! Review or record again</span>
           <span *ngIf="!isRecording && !recordingComplete && !isProcessing">Click the microphone to start recording</span>
         </p>
-      </div>
-
+      </div> 
       <div class="mt-8 flex justify-between">
         <app-button variant="outline" (click)="resetGame()">Cancel</app-button>
         <button

@@ -237,46 +237,49 @@ export class FluentFrontierPageComponent implements OnInit, OnDestroy {
     console.log('Playing recorded audio...');
     alert('Audio playback feature would be implemented here with actual audio storage and playback functionality.');
   }
-
-  async startRecording(): Promise<void> {
-    if (!this.selectedLocation || !this.azureSpeechService.isServiceReady()) {
-      alert('Speech service not ready. Please refresh and try again.');
-      return;
-    }
-
-    try {
-      this.recordingComplete = false;
-      this.feedback = null;
-
-      const result = await this.azureSpeechService.startPronunciationAssessment(
-        this.selectedLocation.challenge.referenceText,
-        this.selectedLocation.challenge.keywords
-      );
-
-      this.processPronunciationResult(result);
-
-    } catch (error) {
-      console.error('Recording failed:', error);
-      
-      let errorMessage = 'Recording failed. ';
-      if (error instanceof Error) {
-        if (error.message.includes('microphone')) {
-          errorMessage += 'Please check your microphone permissions.';
-        } else if (error.message.includes('network') || error.message.includes('subscription')) {
-          errorMessage += 'Please check your internet connection and Azure configuration.';
-        } else {
-          errorMessage += 'Please try again.';
-        }
+    async startRecording(): Promise<void> {
+      if (!this.selectedLocation || !this.azureSpeechService.isServiceReady()) {
+        alert('Speech service not ready. Please refresh and try again.');
+        return;
       }
-      
-      alert(errorMessage);
-      this.resetRecording();
-    }
-  }
 
-  stopRecording(): void {
-    this.azureSpeechService.stopRecording();
-  }
+      try {
+        this.recordingComplete = false;
+        this.feedback = null;
+
+        // Start recording - this will now wait for manual stop
+        const result = await this.azureSpeechService.startPronunciationAssessment(
+          this.selectedLocation.challenge.referenceText,
+          this.selectedLocation.challenge.keywords
+        );
+
+        this.processPronunciationResult(result);
+
+      } catch (error) {
+        console.error('Recording failed:', error);
+        
+        let errorMessage = 'Recording failed. ';
+        if (error instanceof Error) {
+          if (error.message.includes('microphone')) {
+            errorMessage += 'Please check your microphone permissions.';
+          } else if (error.message.includes('network') || error.message.includes('subscription')) {
+            errorMessage += 'Please check your internet connection and Azure configuration.';
+          } else if (error.message.includes('No speech was recognized')) {
+            errorMessage += 'No speech was detected. Please try speaking louder or closer to the microphone.';
+          } else {
+            errorMessage += 'Please try again.';
+          }
+        }
+        
+        alert(errorMessage);
+        this.resetRecording();
+      }
+    }
+
+    // Add explicit stop method that calls the service
+    stopRecording(): void {
+      this.azureSpeechService.stopRecording();
+    }
 
   private processPronunciationResult(result: PronunciationResult): void {
     this.recordingComplete = true;
