@@ -10,6 +10,7 @@ import { NavBarComponent } from '../../components/layout/nav-bar/nav-bar.compone
 import { CardComponent } from '../../components/ui/card/card.component';
 import { CardContentComponent } from '../../components/ui/card/card-content/card-content.component';
 import { ButtonComponent } from '../../components/ui/button/button.component';
+import { SignupPageComponent } from '../signup/signup.component';
 
 @Component({
   selector: 'app-collaboration-page',
@@ -23,7 +24,8 @@ import { ButtonComponent } from '../../components/ui/button/button.component';
     CardComponent,
     CardContentComponent,
     ButtonComponent,
-    NavBarComponent
+    NavBarComponent,
+    
   ],
   templateUrl: './collaoration.component.html',
   styleUrls: ['./collaoration.component.css']
@@ -66,7 +68,8 @@ export class CollaborationPageComponent {
     }, 3000);
   }
 
-  goToSignup(): void{
+  goToSignup(): void {
+   
     console.log('Navigating to signup page...');
     this.router.navigate(['/signup']);
   }

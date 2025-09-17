@@ -22,6 +22,9 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { UserProfilePageComponent } from './pages/userprofile/userprofile.component';
 import { LanguageTranslatorComponent } from './pages/translate/translate.component';
 //import {ChatPracticeComponent} from './pages/chat-practice/chat-practice.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
+import { FeaturesComponent} from './pages/features/features.component';
 
 export const routes: Routes = [
   // Public routes that don't use the main layout
@@ -35,6 +38,9 @@ export const routes: Routes = [
   { path: 'signup', component: SignupPageComponent },
   { path: 'onboarding', component: OnboardingPageComponent },
   { path: 'student', component: StudentsComponent },
+  {path : 'privacypolicy', component: PrivacyPolicyComponent},
+  {path: 'termsofservices', component: TermsOfServiceComponent},
+  {path: 'features',component:FeaturesComponent},
   
 
 
