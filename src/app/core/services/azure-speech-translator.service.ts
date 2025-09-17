@@ -107,98 +107,122 @@ export class AzureSpeechTranslatorService {
   /**
    * Start recording and translating speech
    */
-  async startTranslation(sourceLanguage: string): Promise<void> {
-    if (!this.isServiceReady()) {
-      throw new Error('Translation service not initialized');
-    }
-
-    try {
-      this.recordingStateSubject.next('recording');
-      
-      // Update source language
-      this.speechConfig!.speechRecognitionLanguage = sourceLanguage;
-      
-      // Configure audio input
-      const audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
-      
-      // Create translation recognizer
-      this.translationRecognizer = new sdk.TranslationRecognizer(this.speechConfig!, audioConfig);
-
-      // Handle translation results
-      this.translationRecognizer.recognized = (s, e) => {
-        if (e.result.reason === sdk.ResultReason.TranslatedSpeech) {
-          const originalText = e.result.text;
-          const translatedText = e.result.translations.get('en') || '';
-          
-          if (originalText && translatedText) {
-            const result: TranslationResult = {
-              originalText,
-              originalLanguage: sourceLanguage,
-              translatedText,
-              targetLanguage: 'en-US',
-              confidence: 0.95 // Azure doesn't provide confidence for translation
-            };
-
-            this.translationResultSubject.next(result);
-            this.recordingStateSubject.next('processing');
-            
-            // Auto-speak the translation
-            this.speakTranslation(translatedText);
-          }
-        } else if (e.result.reason === sdk.ResultReason.NoMatch) {
-          console.log('No speech was recognized');
-          this.recordingStateSubject.next('idle');
-        }
-      };
-
-      // Handle errors
-      this.translationRecognizer.canceled = (s, e) => {
-        console.error(`Translation canceled: ${e.errorDetails}`);
-        this.recordingStateSubject.next('idle');
-        
-        if (e.reason === sdk.CancellationReason.Error) {
-          throw new Error(`Translation failed: ${e.errorDetails}`);
-        }
-      };
-
-      // Start continuous recognition
-      this.translationRecognizer.startContinuousRecognitionAsync(
-        () => {
-          console.log('Translation recognition started');
-        },
-        (error) => {
-          console.error('Failed to start translation:', error);
-          this.recordingStateSubject.next('idle');
-          throw new Error(`Failed to start translation: ${error}`);
-        }
-      );
-
-    } catch (error) {
-      this.recordingStateSubject.next('idle');
-      throw error;
-    }
-  }
-
   /**
-   * Stop recording
-   */
-  stopRecording(): void {
-    if (this.translationRecognizer) {
-      this.translationRecognizer.stopContinuousRecognitionAsync(
-        () => {
-          this.translationRecognizer?.close();
-          this.translationRecognizer = null;
-          this.recordingStateSubject.next('idle');
-          console.log('Translation recording stopped');
-        },
-        (error) => {
-          console.error('Error stopping translation:', error);
-          this.recordingStateSubject.next('idle');
-        }
-      );
-    }
+ * Start recording and translating speech
+ */
+async startTranslation(sourceLanguage: string): Promise<void> {
+  if (!this.isServiceReady()) {
+    throw new Error('Translation service not initialized');
   }
 
+  try {
+    this.recordingStateSubject.next('recording');
+    
+    // Update source language
+    this.speechConfig!.speechRecognitionLanguage = sourceLanguage;
+    
+    // Configure audio input
+    const audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
+    
+    // Create translation recognizer
+    this.translationRecognizer = new sdk.TranslationRecognizer(this.speechConfig!, audioConfig);
+
+    // Handle intermediate results (optional - for real-time feedback)
+    this.translationRecognizer.recognizing = (s, e) => {
+      // You can show intermediate text here if desired
+      console.log('Recognizing:', e.result.text);
+    };
+
+    // Handle final translation results
+    this.translationRecognizer.recognized = (s, e) => {
+      if (e.result.reason === sdk.ResultReason.TranslatedSpeech) {
+        const originalText = e.result.text;
+        const translatedText = e.result.translations.get('en') || '';
+        
+        if (originalText && translatedText) {
+          const result: TranslationResult = {
+            originalText,
+            originalLanguage: sourceLanguage,
+            translatedText,
+            targetLanguage: 'en-US',
+            confidence: 0.95
+          };
+
+          this.translationResultSubject.next(result);
+          this.recordingStateSubject.next('processing');
+          
+          // Stop recording after getting a result
+          this.stopRecording();
+          
+          // Auto-speak the translation
+          setTimeout(() => {
+            this.speakTranslation(translatedText);
+          }, 500);
+        }
+      } else if (e.result.reason === sdk.ResultReason.NoMatch) {
+        console.log('No speech was recognized');
+      }
+    };
+
+    // Handle errors
+    this.translationRecognizer.canceled = (s, e) => {
+      console.error(`Translation canceled: ${e.errorDetails}`);
+      this.recordingStateSubject.next('idle');
+      
+      if (e.reason === sdk.CancellationReason.Error) {
+        throw new Error(`Translation failed: ${e.errorDetails}`);
+      }
+    };
+
+    // Handle session events
+    this.translationRecognizer.sessionStopped = (s, e) => {
+      console.log('Translation session stopped');
+      this.recordingStateSubject.next('idle');
+    };
+
+    // Start continuous recognition
+    this.translationRecognizer.startContinuousRecognitionAsync(
+      () => {
+        console.log('Translation recognition started - speak now!');
+      },
+      (error) => {
+        console.error('Failed to start translation:', error);
+        this.recordingStateSubject.next('idle');
+        throw new Error(`Failed to start translation: ${error}`);
+      }
+    );
+
+  } catch (error) {
+    this.recordingStateSubject.next('idle');
+    throw error;
+  }
+}
+
+/**
+ * Stop recording and process results
+ */
+stopRecording(): void {
+  if (this.translationRecognizer) {
+    this.recordingStateSubject.next('processing');
+    
+    this.translationRecognizer.stopContinuousRecognitionAsync(
+      () => {
+        console.log('Translation recording stopped');
+        // Don't set to idle here - let the recognized event handle it
+        // or set to idle after a short delay if no results
+        setTimeout(() => {
+          if (this.recordingStateSubject.value === 'processing') {
+            this.recordingStateSubject.next('idle');
+          }
+        }, 3000);
+      },
+      (error) => {
+        console.error('Error stopping translation:', error);
+        this.recordingStateSubject.next('idle');
+      }
+    );
+  }
+}
   /**
    * Speak the translated text using text-to-speech
    */

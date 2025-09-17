@@ -87,72 +87,68 @@
 
         <!-- Recording Controls -->
         <div class="flex justify-center items-center space-x-6 mb-6">
-          <!-- Start Recording Button -->
+  <!-- Start Recording Button (only show when idle) -->
           <button
-            *ngIf="isIdle"
-            (click)="startRecording()"
-            [disabled]="!hasLanguageSelected"
-            class="w-20 h-20 rounded-full transition-all duration-200 flex items-center justify-center focus:outline-none shadow-lg hover:shadow-xl"
-            [class.bg-blue-100]="hasLanguageSelected"
-            [class.text-blue-600]="hasLanguageSelected"
-            [class.hover:bg-blue-200]="hasLanguageSelected"
-            [class.hover:scale-105]="hasLanguageSelected"
-            [class.focus:ring-4]="hasLanguageSelected"
-            [class.focus:ring-blue-300]="hasLanguageSelected"
-            [class.bg-gray-100]="!hasLanguageSelected"
-            [class.text-gray-400]="!hasLanguageSelected"
-            [class.cursor-not-allowed]="!hasLanguageSelected"
+          *ngIf="isIdle"
+          (click)="startRecording()"
+          [disabled]="!hasLanguageSelected"
+          class="w-20 h-20 rounded-full transition-all duration-200 flex items-center justify-center focus:outline-none shadow-lg hover:shadow-xl"
+          [class.bg-blue-100]="hasLanguageSelected"
+          [class.text-blue-600]="hasLanguageSelected"
+          [class.hover:bg-blue-200]="hasLanguageSelected"
+          [class.hover:scale-105]="hasLanguageSelected"
+          [class.focus:ring-4]="hasLanguageSelected"
+          [class.focus:ring-blue-300]="hasLanguageSelected"
+          [class.bg-gray-100]="!hasLanguageSelected"
+          [class.text-gray-400]="!hasLanguageSelected"
+          [class.cursor-not-allowed]="!hasLanguageSelected"
           >
-            <i-feather name="mic" class="h-10 w-10"></i-feather>
+          <i-feather name="mic" class="h-10 w-10"></i-feather>
           </button>
-
-          <!-- Recording Active Button -->
           <button
-            *ngIf="isRecording"
-            (click)="stopRecording()"
-            class="w-20 h-20 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition-all duration-200 flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-red-300 animate-pulse shadow-lg shadow-red-200"
+          *ngIf="isRecording"
+          (click)="stopRecording()"
+          class="w-20 h-20 rounded-full bg-red-500 text-white hover:bg-red-600 transition-all duration-200 flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-red-300 shadow-lg animate-pulse"
           >
-            <i-feather name="square" class="h-10 w-10"></i-feather>
+          <i-feather name="stop-circle" class="h-10 w-10"></i-feather>
           </button>
 
           <!-- Processing Indicator -->
           <div
-            *ngIf="isProcessing"
-            class="w-20 h-20 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center shadow-lg shadow-yellow-200"
+          *ngIf="isProcessing"
+          class="w-20 h-20 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center shadow-lg shadow-yellow-200"
           >
-            <i-feather name="loader" class="h-10 w-10 animate-spin"></i-feather>
+          <i-feather name="loader" class="h-10 w-10 animate-spin"></i-feather>
           </div>
 
           <!-- Speaking Indicator -->
           <div
-            *ngIf="isSpeaking"
-            class="w-20 h-20 rounded-full bg-green-100 text-green-600 flex items-center justify-center animate-pulse shadow-lg shadow-green-200"
+          *ngIf="isSpeaking"
+          class="w-20 h-20 rounded-full bg-green-100 text-green-600 flex items-center justify-center animate-pulse shadow-lg shadow-green-200"
           >
-            <i-feather name="volume-2" class="h-10 w-10"></i-feather>
+          <i-feather name="volume-2" class="h-10 w-10"></i-feather>
           </div>
-        </div>
+          </div>
+          
 
         <!-- Instructions -->
-        <div class="text-sm text-gray-500 max-w-md mx-auto">
-          <p *ngIf="isIdle && !translationResult && !hasLanguageSelected" class="animate-fade-in text-orange-600 font-medium">
-            Please select your native language from the dropdown above
-          </p>
-          <p *ngIf="isIdle && !translationResult && hasLanguageSelected" class="animate-fade-in">
-            Click the microphone to start speaking in {{ selectedLanguageName.split('(')[0].trim() }}
-          </p>
-          <p *ngIf="isRecording" class="text-red-600 font-medium animate-bounce">
-            Speak clearly in your native language. Click stop when finished.
-          </p>
-          <p *ngIf="isProcessing" class="text-yellow-600 font-medium">
-            Converting your speech to English...
-          </p>
-          <p *ngIf="isSpeaking" class="text-green-600 font-medium">
-            Listen to the English translation
-          </p>
-        </div>
-      </app-card-content>
-    </app-card>
-  </div>
+              <div class="text-sm text-gray-500 max-w-md mx-auto">
+        <p *ngIf="isIdle && !translationResult && !hasLanguageSelected" class="animate-fade-in text-orange-600 font-medium">
+          Please select your native language from the dropdown above
+        </p>
+        <p *ngIf="isIdle && !translationResult && hasLanguageSelected" class="animate-fade-in">
+          Click the microphone to start speaking in {{ selectedLanguageName.split('(')[0].trim() }}
+        </p>
+        <p *ngIf="isRecording" class="text-red-600 font-medium animate-bounce">
+          Recording... Speak clearly or click STOP when finished
+        </p>
+        <p *ngIf="isProcessing" class="text-yellow-600 font-medium">
+          Processing your speech and translating to English...
+        </p>
+        <p *ngIf="isSpeaking" class="text-green-600 font-medium">
+          Playing English translation...
+        </p>
+      </div>
 
   <!-- Translation + Tips Sections stay unchanged -->
   <!-- (keeping your original code here) -->
