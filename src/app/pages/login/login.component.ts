@@ -37,8 +37,9 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
 
-// Import all necessary Firebase services and functions
-import { Auth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
+// Import necessary Firebase and Firestore services
+import { Auth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from '@angular/fire/auth';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-login-page',
@@ -57,8 +58,9 @@ export class LoginPageComponent {
   isLoading = false;
   errorMessage: string | null = null;
 
-  // Inject Firebase Auth and Angular's Router
+  // Inject Firebase Auth, Firestore, and Angular's Router
   private auth: Auth = inject(Auth);
+  private firestore: Firestore = inject(Firestore); // Inject Firestore
   private router: Router = inject(Router);
 
   /**
@@ -85,6 +87,7 @@ export class LoginPageComponent {
 
   /**
    * Handles the "Continue with Google" button click.
+   * Now checks if the user exists in Firestore before logging in.
    */
   async signInWithGoogle(): Promise<void> {
     this.isLoading = true;
@@ -92,8 +95,22 @@ export class LoginPageComponent {
     const provider = new GoogleAuthProvider();
 
     try {
-      await signInWithPopup(this.auth, provider);
-      this.router.navigate(['/dashboard']); // Navigate to dashboard on success
+      const userCredential = await signInWithPopup(this.auth, provider);
+      const user = userCredential.user;
+
+      // **FIX: Check if user document exists in Firestore**
+      const userDocRef = doc(this.firestore, `users/${user.uid}`);
+      const docSnap = await getDoc(userDocRef);
+
+      if (docSnap.exists()) {
+        // User exists, proceed to dashboard
+        this.router.navigate(['/dashboard']);
+      } else {
+        // User does not exist, sign them out and show an error
+        await signOut(this.auth);
+        this.errorMessage = 'No account found. Please create an account first.';
+      }
+
     } catch (error: any) {
       this.handleAuthError(error);
     } finally {
