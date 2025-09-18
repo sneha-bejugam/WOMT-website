@@ -19,6 +19,8 @@
     "@angular/platform-browser": "^19.1.0",
     "@angular/platform-browser-dynamic": "^19.1.0",
     "@angular/router": "^19.1.0",
+    "@azure/storage-blob": "^12.28.0",
+    "@netlify/functions": "^4.2.5",
     "angular-feather": "^6.5.1",
     "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",

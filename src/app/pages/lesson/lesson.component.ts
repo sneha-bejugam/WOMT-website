@@ -5,6 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
 import { DataService } from '../../core/services/data.service';
 import { LessonModule, LessonStep } from '../../core/models/type';
+// Import the video service
+import { VideoStorageService, VideoFile } from '../../core/services/video-storage.service';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 // Import all the UI components this page uses
 import { CardComponent } from '../../components/ui/card/card.component';
@@ -32,6 +36,7 @@ import { BadgeComponent } from '../../components/ui/badge/badge.component';
 })
 export class LessonPageComponent implements OnInit {
   currentLesson: LessonModule | null = null;
+  isLoading = true; 
   currentStepIndex = 0;
   userAnswers: Record<string, string | string[]> = {};
   isRecording = false;
@@ -40,10 +45,14 @@ export class LessonPageComponent implements OnInit {
   quizResult: 'correct' | 'incorrect' | null = null;
   textInput = '';
 
+  // Observable to hold the video data for the current step
+  currentStepVideo$: Observable<VideoFile | null> | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private dataService: DataService
+    private dataService: DataService,
+    private videoService: VideoStorageService // Inject the video service
   ) {}
 
   ngOnInit(): void {
@@ -52,10 +61,12 @@ export class LessonPageComponent implements OnInit {
       const lesson = this.dataService.getLessonModules().find(module => module.id === lessonId);
       if (lesson) {
         this.currentLesson = lesson;
+        this.loadVideoForCurrentStep(); // Initial video load
       } else {
         this.router.navigate(['/lessons']);
       }
     }
+    this.isLoading = false;
   }
 
   get currentStep(): LessonStep | null {
@@ -72,6 +83,7 @@ export class LessonPageComponent implements OnInit {
       this.currentLesson.steps[this.currentStepIndex].completed = true;
       this.currentStepIndex++;
       this.resetStepState();
+      this.loadVideoForCurrentStep(); // Load video for the new step
     } else if (this.currentLesson) {
       this.currentLesson.completed = true;
       this.router.navigate(['/dashboard']);
@@ -82,6 +94,18 @@ export class LessonPageComponent implements OnInit {
     if (this.currentStepIndex > 0) {
       this.currentStepIndex--;
       this.resetStepState();
+      this.loadVideoForCurrentStep(); // Load video for the previous step
+    }
+  }
+
+  // New method to fetch video data when the step changes
+  private loadVideoForCurrentStep(): void {
+    const step = this.currentStep;
+    if (step && step.media?.type === 'video') {
+      // Use the video name from the step's media URL field
+      this.currentStepVideo$ = this.videoService.getVideo(step.media.url);
+    } else {
+      this.currentStepVideo$ = of(null);
     }
   }
 
@@ -116,7 +140,7 @@ export class LessonPageComponent implements OnInit {
   submitTextInput(): void {
     if (this.currentStep && (this.currentStep.type === 'exercise' || this.currentStep.type === 'practice')) {
       this.userAnswers[this.currentStep.id] = this.textInput;
-      this.quizSubmitted = true; // Use this to show submission confirmation
+      this.quizSubmitted = true;
     }
   }
 

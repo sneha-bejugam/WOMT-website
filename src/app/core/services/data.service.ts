@@ -202,18 +202,29 @@ export class DataService {
   getLessonModules(): LessonModule[] {
     return [
       {
-        id: 'email-etiquette',
-        title: 'Professional Email Etiquette',
-        description: 'Master the art of writing clear, effective business emails',
+        id: 'P1',
+        title: 'Escalate the issue',
+        description: 'A American woman talking to their board members',
         category: 'grammar',
         difficulty: 'intermediate',
-        duration: 30,
+        duration: 1,
         points: 200,
         image: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         progress: 25,
         completed: false,
         steps: [
-          // ... all the steps for this lesson module
+         {
+                id: 'P1',
+                type: 'introduction',
+                title: 'Escalate the issue',
+                content: 'A American woman talking to their board members',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P1.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
         ]
       },
       {
