@@ -154,60 +154,17 @@ export class DataService {
     ];
   }
 
-  getChatScenarios(): ChatScenario[] {
-    return [
-      {
-        id: '1',
-        title: 'Job Interview Preparation',
-        description: 'Practice answering common job interview questions',
-        context: 'You are interviewing for a senior position at a multinational company',
-        difficulty: 'advanced',
-        category: 'interview'
-      },
-      {
-        id: '2',
-        title: 'Client Negotiation',
-        description: 'Practice negotiating contract terms with a client',
-        context: 'You need to negotiate pricing and delivery terms with an important client',
-        difficulty: 'advanced',
-        category: 'negotiation'
-      },
-      {
-        id: '3',
-        title: 'Daily Stand-up Meeting',
-        description: 'Practice participating in an agile team stand-up',
-        context: 'Share your progress, plans, and blockers in a daily team meeting',
-        difficulty: 'intermediate',
-        category: 'meeting'
-      },
-      {
-        id: '4',
-        title: 'Networking at a Conference',
-        description: 'Practice introducing yourself and making connections',
-        context: 'You are attending an industry conference and want to expand your professional network',
-        difficulty: 'beginner',
-        category: 'networking'
-      },
-      {
-        id: '5',
-        title: 'Product Presentation',
-        description: 'Present a new product to potential customers',
-        context: 'You are presenting your company\'s latest product to a group of potential clients',
-        difficulty: 'intermediate',
-        category: 'presentation'
-      }
-    ];
-  }
+  
 
   getLessonModules(): LessonModule[] {
     return [
       {
-        id: 'P1',
-        title: 'Escalate the issue',
-        description: 'A American woman talking to their board members',
+        id: 'Indian_phrases',
+        title: 'Indian common workspace phrases',
+        description: 'Phrases that are most commonly used and in Indian workspace',
         category: 'grammar',
         difficulty: 'intermediate',
-        duration: 1,
+        duration: 15,
         points: 200,
         image: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         progress: 25,
@@ -217,7 +174,7 @@ export class DataService {
                 id: 'P1',
                 type: 'introduction',
                 title: 'Escalate the issue',
-                content: 'A American woman talking to their board members',
+                content: "If this keeps happening, I'll need to escalate the issue to my supervisor.",
                 // ✅ THIS IS THE CONNECTION
                 media: {
                   type: 'video',
@@ -225,38 +182,278 @@ export class DataService {
                 },
                 completed: false
               },
+              {
+                id: 'P2',
+                type: 'introduction',
+                title: ' Let me check with my team',
+                content: 'That’s a great question—let me check with my team and get back to you.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P2.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P3',
+                type: 'introduction',
+                title: 'That’s outside my scope',
+                content: 'I understand your concern, but that’s outside my scope of responsibility.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P3.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P4',
+                type: 'introduction',
+                title: 'Can you clarify your request',
+                content: 'I want to make sure I understand—can you clarify your request a bit?',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P4.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P5',
+                type: 'introduction',
+                title: ' I’ll follow up by email',
+                content: 'Thanks for the update—I’ll follow up by email with the next steps.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P5.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
         ]
       },
       {
-        id: 'presentation-skills',
-        title: 'Presentation Skills Mastery',
-        description: 'Learn techniques to deliver compelling business presentations with confidence',
+        id: 'American_phrases',
+        title: 'American common workspace phrases',
+        description: 'Phrases that are most commonly used and in American workspace',
         category: 'fluency',
         difficulty: 'intermediate',
-        duration: 45,
+        duration: 15,
         points: 250,
         image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         progress: 0,
         completed: false,
         steps: [
-          // ... all the steps for this lesson module
+         {
+                id: 'P6',
+                type: 'introduction',
+                title: 'That’s not my area of expertise',
+                content: "I’d love to help, but that’s not my area of expertise.",
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P6.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P7',
+                type: 'introduction',
+                title: "I’ll loop in a colleague",
+                content: 'Let me loop in a colleague who’s better equipped to answer that.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P7.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P8',
+                type: 'introduction',
+                title: ' I’m not authorized to approve that',
+                content: 'I understand your concern, but that’s outside my scope of responsibility.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P8.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P9',
+                type: 'introduction',
+                title: 'Can you clarify your request',
+                content: 'I want to make sure I understand—can you clarify your request a bit?',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P9.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P10',
+                type: 'introduction',
+                title: 'I’ll send a summary after this',
+                content: 'I’ll send a quick summary after this call so we’re all aligned.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P10.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
         ]
       },
       {
-        id: 'negotiation-fundamentals',
-        title: 'Negotiation Fundamentals',
-        description: 'Develop essential negotiation skills and vocabulary for business contexts',
-        category: 'vocabulary',
-        difficulty: 'advanced',
-        duration: 40,
-        points: 300,
-        image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        id: 'French_phrases',
+        title: 'French common workspace phrases',
+        description: 'Phrases that are most commonly used and in French workspace',
+        category: 'fluency',
+        difficulty: 'intermediate',
+        duration: 15,
+        points: 250,
+        image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         progress: 0,
         completed: false,
         steps: [
-          // ... all the steps for this lesson module
+         {
+                id: 'P11',
+                type: 'introduction',
+                title: 'That’s a great question',
+                content: "That’s a great question—thanks for bringing it up.",
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P11.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P12',
+                type: 'introduction',
+                title: "I’ll need more context",
+                content: 'I’ll need a bit more context before I can give a clear answer.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P12.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P13',
+                type: 'introduction',
+                title: 'Let me rephrase that',
+                content: 'Let me rephrase that to make it clearer.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P13.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P14',
+                type: 'introduction',
+                title: 'I’ll defer to the team',
+                content: 'I’ll defer to the team on that decision.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P14.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P15',
+                type: 'introduction',
+                title: 'Can you expand on that',
+                content: 'Can you expand on that a little so I understand your angle?',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P15.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
         ]
-      }
+      },
+      {
+        id: 'French_phrases',
+        title: 'French common workspace phrases',
+        description: 'Phrases that are most commonly used and in French workspace',
+        category: 'fluency',
+        difficulty: 'intermediate',
+        duration: 15,
+        points: 250,
+        image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        progress: 0,
+        completed: false,
+        steps: [
+         {
+                id: 'P16',
+                type: 'introduction',
+                title: 'I’ll take that offline',
+                content: "Let’s take that offline and follow up separately.",
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P16.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P17',
+                type: 'introduction',
+                title: "That’s a valid concern",
+                content: 'That’s a valid concern—we’ll make sure it’s addressed.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P17.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+               id: 'P18',
+                type: 'introduction',
+                title: 'I’ll flag that for review',
+                content: 'I’ll flag that for review and loop in the right folks.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P18.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P19',
+                type: 'introduction',
+                title: 'Let’s align on next steps',
+                content: 'Let’s align on next steps before we wrap up.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P19.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+              {
+                id: 'P20',
+                type: 'introduction',
+                title: 'I’ll get back to you soon',
+                content: 'I’ll get back to you soon once I’ve checked with the team.',
+                // ✅ THIS IS THE CONNECTION
+                media: {
+                  type: 'video',
+                  url: 'P20.mp4' // The exact filename from Azure
+                },
+                completed: false
+              },
+        ]
+      },
     ];
   }
 }
