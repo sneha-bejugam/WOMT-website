@@ -104,9 +104,8 @@
         </div>
       </div>
 
-      <!-- THE FIX: Added 'mt-auto' to push the button block to the bottom -->
-      <!-- <div class="mt-auto pt-4">
-        THIS IS THE FIX: This container now has a fixed height to prevent layout shifts >
+      <div class="mt-auto pt-4">
+        <!-- THIS IS THE FIX: This container now has a fixed height to prevent layout shifts -->
         <div class="mb-4 h-9">
           <div *ngIf="phrase.progress > 0 && !phrase.completed">
             <div class="flex justify-between text-xs mb-1">
@@ -132,7 +131,7 @@
   </app-card>
 </div>
 
- No results message -->
+
 <div *ngIf="filteredPhrases.length === 0" class="bg-white rounded-lg shadow-sm p-8 text-center">
   <i-feather name="book-open" class="h-12 w-12 text-gray-400 mx-auto mb-4"></i-feather>
   <h3 class="text-lg font-medium text-gray-900 mb-2">No lessons found</h3>

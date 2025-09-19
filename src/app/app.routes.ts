@@ -28,6 +28,7 @@ import { FeaturesComponent} from './pages/features/features.component';
 import {PracticePhrasesComponent} from './pages/practice-phrases/practice-phrases.component'
 import {PracticeComponent} from './pages/practice/practice.component'
 
+
 export const routes: Routes = [
   // Public routes that don't use the main layout
   { path: '', component: HomePageComponent },

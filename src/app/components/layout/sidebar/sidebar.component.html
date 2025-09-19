@@ -1,16 +1,19 @@
-<!-- Fixed sidebar - always visible -->
-<aside class="fixed inset-y-0 left-0 z-20 flex flex-col bg-white border-r border-gray-200 w-64">
+<aside
+  class="fixed inset-y-0 left-0 z-20 flex flex-col bg-white border-r border-gray-200 w-64 transition-transform duration-300 ease-in-out lg:translate-x-0"
+  [ngClass]="{
+    'translate-x-0': isOpen,
+    '-translate-x-full': !isOpen
+  }"
+>
   <div class="flex flex-col flex-grow overflow-y-auto">
-    <!-- Logo at the top -->
     <div class="flex items-center justify-center px-4 py-6">
-      <img 
-        src="assets/logo.png" 
-        alt="Word of Mouth Logo" 
+      <img
+        src="assets/logo.png"
+        alt="Word of Mouth Logo"
         class="h-12 w-auto"
       />
     </div>
 
-    <!-- Navigation Menu -->
     <nav class="flex-1 px-4 space-y-2">
       <a
         *ngFor="let item of navItems"
@@ -18,15 +21,13 @@
         routerLinkActive #rla="routerLinkActive"
         [class]="'group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ' + (rla.isActive ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')"
       >
-        <!-- The <i-feather> component renders the icon based on the string name -->
         <i-feather [name]="item.icon" class="mr-3 h-5 w-5 flex-shrink-0"></i-feather>
         <span class="truncate">{{ item.name }}</span>
       </a>
     </nav>
 
-    <!-- Logout at the bottom -->
     <div class="px-4 py-4 border-t border-gray-200">
-      <button 
+      <button
         (click)="logout()"
         class="group flex w-full items-center px-3 py-3 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50 transition-colors duration-200">
         <i-feather name="log-out" class="mr-3 h-5 w-5 flex-shrink-0"></i-feather>
@@ -35,3 +36,9 @@
     </div>
   </div>
 </aside>
+
+<div
+  *ngIf="isOpen"
+  (click)="isOpen = false"
+  class="fixed inset-0 bg-black opacity-50 z-10 lg:hidden"
+></div>
