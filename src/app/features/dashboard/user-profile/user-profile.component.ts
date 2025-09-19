@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
-import { DataService } from '../../../core/services/data.service';
-import { User } from '../../../core/models/type';
 
-// Import the UI components this component uses
+// Import Firebase services
+import { Auth, authState, User as FirebaseUser } from '@angular/fire/auth';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+
+import { User } from '../../../core/models/type';
 import { CardComponent } from '../../../components/ui/card/card.component';
 import { CardContentComponent } from '../../../components/ui/card/card-content/card-content.component';
 import { AvatarComponent } from '../../../components/ui/avatar/avatar.component';
@@ -25,29 +27,57 @@ import { ProgressBarComponent } from '../../../pages/progess-bar/progess-bar.com
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  currentUser!: User;
+  private auth: Auth = inject(Auth);
+  private firestore: Firestore = inject(Firestore);
+
+  currentUser: User | null = null;
   nextLevelXP: number = 0;
   xpProgress: number = 0;
 
-  // Inject the DataService to fetch data
-  constructor(private dataService: DataService) {}
+  constructor() {}
 
-  // ngOnInit is a lifecycle hook that runs once when the component is initialized
   ngOnInit(): void {
-    this.currentUser = this.dataService.getCurrentUser();
-    this.calculateXP();
+    authState(this.auth).subscribe(async (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        const userDocRef = doc(this.firestore, `users/${firebaseUser.uid}`);
+        const docSnap = await getDoc(userDocRef);
+
+        if (docSnap.exists()) {
+          const profileData = docSnap.data();
+          this.currentUser = {
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || 'User',
+            avatar: firebaseUser.photoURL || '',
+            ...profileData,
+            // ✅ SET DEFAULTS: Use ?? to provide a default value if the property is null or undefined
+            level: profileData['level'] ?? 1,
+            points: profileData['points'] ?? 0,
+          } as User;
+          
+          this.calculateXP();
+        }
+      } else {
+        this.currentUser = null;
+      }
+    });
   }
 
-  // Calculates the user's progress towards the next level
+  /**
+   * ✅ MODIFIED: Calculates the user's progress towards the next level
+   * based on a 3000 XP per level system.
+   */
   private calculateXP(): void {
     if (!this.currentUser) return;
 
-    const currentLevelXP = this.currentUser.level * 1000;
-    this.nextLevelXP = (this.currentUser.level + 1) * 1000;
+    const xpPerLevel = 3000;
+    const currentLevelBaseXP = (this.currentUser.level - 1) * xpPerLevel;
     
-    const progress = this.currentUser.points - currentLevelXP;
-    const required = this.nextLevelXP - currentLevelXP;
+    this.nextLevelXP = this.currentUser.level * xpPerLevel;
     
-    this.xpProgress = (progress / required) * 100;
+    const progressIntoCurrentLevel = this.currentUser.points - currentLevelBaseXP;
+    const requiredForNextLevel = this.nextLevelXP - currentLevelBaseXP;
+    
+    // Ensure progress is not negative or over 100%
+    this.xpProgress = Math.max(0, Math.min(100, (progressIntoCurrentLevel / requiredForNextLevel) * 100));
   }
 }

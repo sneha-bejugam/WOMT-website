@@ -1,48 +1,75 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router, RouterModule } from '@angular/router'; // Needed for routerLink
-import { CommonModule } from '@angular/common'; // Needed for *ngIf
-
-// Import the icon module
+import { Component, OnInit, inject, Output, EventEmitter } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 
-import { User } from '../../../core/models/type';
-import { DataService } from '../../../core/services/data.service';
-import { AvatarComponent } from '../../ui/avatar/avatar.component'; 
-// Import the standalone Avatar component
+// ✅ Import Firebase services
+import { Auth, authState, User as FirebaseUser } from '@angular/fire/auth';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+
+import { User } from '../../../core/models/type'; // Your application's User interface
+import { AvatarComponent } from '../../ui/avatar/avatar.component';
 
 @Component({
   selector: 'app-header',
-  standalone: true, // <-- Make the component standalone
+  standalone: true,
   imports: [
     CommonModule,
     RouterModule,
-    FeatherModule, // <-- Import the icon module here
-    AvatarComponent // <-- Import the child component here
+    FeatherModule,
+    AvatarComponent
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  // This emits an event to the parent component, replacing the toggleSidebar function prop
   @Output() sidebarToggled = new EventEmitter<void>();
 
-  // Holds the user data fetched from the service
-  currentUser!: User;
+  // ✅ Inject Firebase Auth and Firestore directly
+  private auth: Auth = inject(Auth);
+  private firestore: Firestore = inject(Firestore);
+  
+  // This will hold the complete user profile from Firestore and Auth
+  currentUser: User | null = null;
 
-  // Inject the DataService to get mock data
-  constructor(private dataService: DataService, private router: Router) { }
+  constructor(private router: Router) {}
 
-  // ngOnInit is a lifecycle hook that runs once, after the component is created
   ngOnInit(): void {
-    this.currentUser = this.dataService.getCurrentUser();
+    // ✅ Listen for real-time authentication state changes
+    authState(this.auth).subscribe(async (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        // User is logged in, fetch their profile from Firestore
+        const userDocRef = doc(this.firestore, `users/${firebaseUser.uid}`);
+        const docSnap = await getDoc(userDocRef);
+
+        if (docSnap.exists()) {
+          // Combine auth data and Firestore data into one object
+          const profileData = docSnap.data();
+          this.currentUser = {
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || 'User',
+            email: firebaseUser.email || '',
+            avatar: firebaseUser.photoURL || '',
+            // Spread the rest of the profile data from Firestore
+            ...profileData
+          } as User;
+        } else {
+          // Handle case where user exists in Auth but not in Firestore
+          console.error("User profile not found in Firestore.");
+          this.currentUser = null;
+        }
+      } else {
+        // User is logged out
+        this.currentUser = null;
+      }
+    });
   }
 
-  // This method is called when the menu button is clicked in the template
   onToggleSidebar(): void {
     this.sidebarToggled.emit();
   }
 
   gotouserprofile(): void {
     this.router.navigate(['/userprofile']);
- }
+  }
 }

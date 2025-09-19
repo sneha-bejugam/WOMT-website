@@ -6,17 +6,8 @@
         class="text-gray-500 hover:text-gray-600 lg:hidden"
         (click)="onToggleSidebar()"
       >
-
         <i-feather name="menu" class="h-6 w-6"></i-feather>
       </button>
-       
-      <!-- <a routerLink="/" class="flex items-center ml-4 lg:ml-0">
-        <img
-          src="assets/logo.png"
-          alt="Word of Mouth Logo"
-          class="h-10 w-auto"
-        />
-      </a> -->
     </div>
 
     <div class="flex items-center gap-4">
@@ -33,7 +24,6 @@
           class="flex items-center gap-2 text-sm focus:outline-none"
           (click)="gotouserprofile()"
         >
-        
           <app-avatar
             [src]="currentUser.avatar"
             [alt]="currentUser.name"
@@ -41,7 +31,7 @@
           ></app-avatar>
           
           <span class="hidden md:block font-medium text-gray-700">
-             {{currentUser.name}}
+             {{ currentUser.name }}
           </span>
         </button>
       </div>

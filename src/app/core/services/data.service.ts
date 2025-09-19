@@ -84,7 +84,7 @@ export class DataService {
         difficulty: 'intermediate',
         duration: 20,
         points: 150,
-        completed: true
+        completed: false
       },
       {
         id: '2',
@@ -104,7 +104,7 @@ export class DataService {
         difficulty: 'intermediate',
         duration: 15,
         points: 120,
-        completed: true
+        completed: false
       },
       {
         id: '4',
