@@ -25,6 +25,8 @@ import { LanguageTranslatorComponent } from './pages/translate/translate.compone
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
 import { FeaturesComponent} from './pages/features/features.component';
+import {PracticePhrasesComponent} from './pages/practice-phrases/practice-phrases.component'
+import {PracticeComponent} from './pages/practice/practice.component'
 
 export const routes: Routes = [
   // Public routes that don't use the main layout
@@ -38,9 +40,9 @@ export const routes: Routes = [
   { path: 'signup', component: SignupPageComponent },
   { path: 'onboarding', component: OnboardingPageComponent },
   { path: 'student', component: StudentsComponent },
-  {path : 'privacypolicy', component: PrivacyPolicyComponent},
-  {path: 'termsofservices', component: TermsOfServiceComponent},
-  {path: 'features',component:FeaturesComponent},
+  { path : 'privacypolicy', component: PrivacyPolicyComponent},
+  { path: 'termsofservices', component: TermsOfServiceComponent},
+  { path: 'features',component:FeaturesComponent},
 //  { path: 'fluent-frontier', component: FluentFrontierPageComponent },
   
 
@@ -59,6 +61,8 @@ export const routes: Routes = [
       { path: 'settings', component : SettingsComponent},
       { path: 'userprofile', component: UserProfilePageComponent },
       { path: 'translate', component: LanguageTranslatorComponent },
+      { path: 'practice', component: PracticeComponent },
+      { path: 'practice/:phraseId', component: PracticePhrasesComponent },
      // { path: 'chat' , component: ChatPracticeComponent }
     ]
   },

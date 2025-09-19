@@ -29,6 +29,7 @@ export class SidebarComponent {
   navItems: NavItem[] = [
     { name: 'Dashboard', icon: 'home', path: '/dashboard' },
     { name: 'Lessons', icon: 'book-open', path: '/lessons' },
+    { name: 'Practice Phrases', icon: 'volume-1', path: '/practice' },
     { name: 'Translate', icon: 'shuffle', path: '/translate' },
     { name: 'Fluent Frontier', icon: 'globe', path: '/fluent-frontier' },
    // { name: 'Chat Practice', icon: 'message-circle', path: '/chat' },

@@ -16,7 +16,7 @@ import { ProgressBarComponent } from '../progess-bar/progess-bar.component';
 interface UserProfile {
   fullName: string;
   profession: string;
-  email?: string; // Email might come from Auth, but good to have here
+  email?: string;
   accent: {
     dialect: string;
     specifics: string;
@@ -24,6 +24,13 @@ interface UserProfile {
   nativeLanguage: string;
   proficiencyLevel: string;
   learningGoals: string[];
+  // ✅ ADD THIS PROPERTY TO HOLD PROGRESS DATA
+  progress?: {
+    pronunciation: number;
+    grammar: number;
+    vocabulary: number;
+    fluency: number;
+  };
   baselineAssessment?: {
     pronunciation: number;
     fluency: number;

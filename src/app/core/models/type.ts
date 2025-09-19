@@ -50,6 +50,21 @@ export interface LessonStep {
   completed: boolean;
 }
 
+export interface PhraseStep {
+  id:string;
+  type: 'introduction' | 'content' | 'exercise' | 'quiz' | 'practice' | 'summary';
+  title: string;
+  content: string;
+  media?: {
+    type: 'image' | 'audio' | 'video';
+    url: string;
+  };
+  options?: string[];
+  correctAnswer?: string | string[];
+  userAnswer?: string | string[];
+  completed: boolean;
+}
+
 export interface LessonModule {
   id: string;
   title: string;
@@ -60,6 +75,20 @@ export interface LessonModule {
   points: number;
   image: string;
   steps: LessonStep[];
+  progress: number;
+  completed: boolean;
+}
+
+export interface PhraseModule {
+  id: string;
+  title: string;
+  description: string;
+  category: 'pronunciation' | 'grammar' | 'vocabulary' | 'fluency' | 'cultural';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  duration: number;
+  points: number;
+  image: string;
+  steps: PhraseStep[];
   progress: number;
   completed: boolean;
 }

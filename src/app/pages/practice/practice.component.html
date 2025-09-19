@@ -15,7 +15,7 @@
       </div>
       <input
         type="text"
-        placeholder="Search lessons..."
+        placeholder="Search Practice Phrases..."
         class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         [(ngModel)]="searchQuery"
         (ngModelChange)="onFilterChange()"
@@ -62,18 +62,18 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   <!-- THE FIX: Added 'flex' and 'flex-col' to make the card a flex container -->
   <app-card
-    *ngFor="let lesson of filteredLessons"
+    *ngFor="let phrase of filteredPhrases"
     class="bg-white transition-all hover:shadow-md flex flex-col"
-    [ngClass]="{'border-green-200': lesson.completed}"
+    [ngClass]="{'border-green-200': phrase.completed}"
   >
     <div class="relative h-40 overflow-hidden rounded-t-lg">
-      <img [src]="lesson.image" [alt]="lesson.title" class="w-full h-full object-cover" />
-      <div *ngIf="lesson.completed" class="absolute top-2 right-2 bg-green-500 text-white rounded-full p-1">
+      <img [src]="phrase.image" [alt]="phrase.title" class="w-full h-full object-cover" />
+      <div *ngIf="phrase.completed" class="absolute top-2 right-2 bg-green-500 text-white rounded-full p-1">
         <i-feather name="check-circle" class="h-5 w-5"></i-feather>
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-        <app-badge [variant]="lesson.difficulty === 'beginner' ? 'success' : lesson.difficulty === 'intermediate' ? 'warning' : 'danger'">
-          {{ lesson.difficulty.charAt(0).toUpperCase() + lesson.difficulty.slice(1) }}
+        <app-badge [variant]="phrase.difficulty === 'beginner' ? 'success' : phrase.difficulty === 'intermediate' ? 'warning' : 'danger'">
+          {{ phrase.difficulty.charAt(0).toUpperCase() + phrase.difficulty.slice(1) }}
         </app-badge>
       </div>
     </div>
@@ -81,26 +81,26 @@
     <!-- THE FIX: Added 'flex', 'flex-col', and 'flex-grow' to make this section fill available space -->
     <app-card-content class="p-4 flex flex-col flex-grow">
       <div class="flex justify-between items-start mb-2">
-        <h3 class="font-semibold text-gray-900">{{ lesson.title }}</h3>
+        <h3 class="font-semibold text-gray-900">{{ phrase.title }}</h3>
         <app-badge variant="secondary">
-          {{ lesson.category.charAt(0).toUpperCase() + lesson.category.slice(1) }}
+          {{ phrase.category.charAt(0).toUpperCase() + phrase.category.slice(1) }}
         </app-badge>
       </div>
 
-      <p class="text-sm text-gray-600 mb-4 h-10 overflow-hidden">{{ lesson.description }}</p>
+      <p class="text-sm text-gray-600 mb-4 h-10 overflow-hidden">{{ phrase.description }}</p>
 
       <div class="flex items-center justify-between text-sm text-gray-500">
         <div class="flex items-center">
           <i-feather name="clock" class="h-4 w-4 mr-1"></i-feather>
-          <span>{{ lesson.duration }} min</span>
+          <span>{{ phrase.duration }} min</span>
         </div>
         <div class="flex items-center">
           <i-feather name="bar-chart" class="h-4 w-4 mr-1"></i-feather>
-          <span>{{ lesson.points }} XP</span>
+          <span>{{ phrase.points }} XP</span>
         </div>
         <div class="flex items-center">
           <i-feather name="book-open" class="h-4 w-4 mr-1"></i-feather>
-          <span>{{ lesson.steps.length }} steps</span>
+          <span>{{ phrase.steps.length }} steps</span>
         </div>
       </div>
 
@@ -108,23 +108,23 @@
       <div class="mt-auto pt-4">
         <!-- THIS IS THE FIX: This container now has a fixed height to prevent layout shifts -->
         <div class="mb-4 h-9">
-          <div *ngIf="lesson.progress > 0 && !lesson.completed">
+          <div *ngIf="phrase.progress > 0 && !phrase.completed">
             <div class="flex justify-between text-xs mb-1">
               <span>Progress</span>
-              <span>{{ lesson.progress }}%</span>
+              <span>{{ phrase.progress }}%</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-1.5">
-              <div class="bg-blue-600 h-1.5 rounded-full" [style.width.%]="lesson.progress"></div>
+              <div class="bg-blue-600 h-1.5 rounded-full" [style.width.%]="phrase.progress"></div>
             </div>
           </div>
         </div>
 
         <app-button
-          [variant]="lesson.completed ? 'secondary' : 'primary'"
+          [variant]="phrase.completed ? 'secondary' : 'primary'"
           [fullWidth]="true"
-          (click)="gotolesson(lesson.id)"
+          (click)="gotoPhrase(phrase.id)"
         >
-          {{ lesson.completed ? "Review Lesson" : (lesson.progress > 0 ? "Continue" : "Start Lesson") }}
+          {{ phrase.completed ? "Review Lesson" : (phrase.progress > 0 ? "Continue" : "Start Lesson") }}
           <i-feather name="chevron-right" icon class="h-4 w-4 ml-2"></i-feather>
         </app-button>
       </div>
@@ -133,7 +133,7 @@
 </div>
 
 <!-- No results message -->
-<div *ngIf="filteredLessons.length === 0" class="bg-white rounded-lg shadow-sm p-8 text-center">
+<div *ngIf="filteredPhrases.length === 0" class="bg-white rounded-lg shadow-sm p-8 text-center">
   <i-feather name="book-open" class="h-12 w-12 text-gray-400 mx-auto mb-4"></i-feather>
   <h3 class="text-lg font-medium text-gray-900 mb-2">No lessons found</h3>
   <p class="text-gray-600 mb-4">
